@@ -373,4 +373,6 @@ jobs:
       - name: Run build script
         working-directory: ./code/day2-operations/source/day2-service
         run: |
-          echo ${{ steps.meta.outputs.tags }}
+          sudo chmod 777 mvnw
+          ./mvnw spring-boot:build-image -DskipTests=true -Dspring-boot.build-image.imageName="${{ steps.meta.outputs.tags }}"
+          docker push "${{ steps.meta.outputs.tags }}"          
