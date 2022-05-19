@@ -281,7 +281,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
   
   build_and_push_day2_approuter:
-    name: Day2 Approuter
+    name: Day2-Approuter
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -315,7 +315,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
   build_and_push_day2_ui:
-    name: Day2 UI
+    name: Day2-UI
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -347,9 +347,9 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-    build_and_push_day2_service:
-    name: Day2 Service
+  
+  build_and_push_day2_service:
+    name: Day2-Service
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -376,3 +376,4 @@ jobs:
           sudo chmod 777 mvnw
           ./mvnw spring-boot:build-image -DskipTests=true -Dspring-boot.build-image.imageName="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-day2-service:${{ steps.meta.outputs.tags }}"
           docker push "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-day2-service:${{ steps.meta.outputs.tags }}"
+  
