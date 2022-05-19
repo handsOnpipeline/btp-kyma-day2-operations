@@ -1,0 +1,33 @@
+---
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: ef-kibana
+spec:
+  version: 7.15.0
+  count: 1
+  elasticsearchRef:
+    name: "ef-elasticsearch"
+  http:
+  #  service:
+  #    spec:
+  #      type: LoadBalancer
+    tls:
+      # certificate:
+      #   secretName: kyma-gateway-certs
+      selfSignedCertificate:
+        disabled: true
+
+  # this shows how to customize the Kibana pod
+  # with labels and resource limits
+  # podTemplate:
+  #   metadata:
+  #     labels:
+  #       foo: bar
+  #   spec:
+  #     containers:
+  #     - name: kibana
+  #       resources:
+  #         limits:
+  #           memory: 1Gi
+  #           cpu: 1

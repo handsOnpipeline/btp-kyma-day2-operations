@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: day2-ui
+  namespace: day2-operations
+spec:
+  selector:
+    matchLabels:
+      app: day2-ui
+  template:
+    metadata:
+      labels:
+        app: day2-ui
+    spec:
+      imagePullSecrets:
+        - name: registry-secret # replace with your own registry secret
+      containers:
+      - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        name: day2-ui
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: day2-ui
+  namespace: day2-operations
+  labels:
+    app: day2-ui
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+  selector:
+    app: day2-ui

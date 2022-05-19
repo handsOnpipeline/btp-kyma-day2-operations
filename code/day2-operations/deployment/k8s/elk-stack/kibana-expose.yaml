@@ -1,0 +1,39 @@
+# ---
+# apiVersion: networking.istio.io/v1alpha3
+# kind: VirtualService
+# metadata:
+#   name: kibana-expose
+# spec:
+#   gateways:
+#     - kyma-system/kyma-gateway
+#   hosts:
+#   - "kibana.c-32e79b1.stage.kyma.ondemand.com"
+#   http:
+#   - match:
+#     - uri:
+#         regex: /.*
+#     route:
+#     - destination:
+#         port:
+#           number: 5601
+#         host: ef-kibana-kb-http
+---
+apiVersion: gateway.kyma-project.io/v1alpha1
+kind: APIRule
+metadata:
+  name: kibana-expose
+spec:
+  gateway: kyma-gateway.kyma-system.svc.cluster.local
+  service:
+    name: ef-kibana-kb-http
+    port: 5601
+    host: kibana 
+  rules:
+    - path: /.*
+      methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD"]
+      mutators:
+        - handler: header
+          config: {}
+      accessStrategies:
+        - handler: noop    
+---

@@ -1,0 +1,39 @@
+# ---
+# apiVersion: networking.istio.io/v1alpha3
+# kind: VirtualService
+# metadata:
+#   name: elastic-expose
+# spec:
+#   gateways:
+#     - kyma-system/kyma-gateway
+#   hosts:
+#   - "elasticsearch.c-32e79b1.stage.kyma.ondemand.com"
+#   http:
+#   - match:
+#     - uri:
+#         regex: /.*
+#     route:
+#     - destination:
+#         port:
+#           number: 9200
+#         host: ef-elasticsearch-es-http
+---
+apiVersion: gateway.kyma-project.io/v1alpha1
+kind: APIRule
+metadata:
+  name: elastic-expose
+spec:
+  gateway: kyma-gateway.kyma-system.svc.cluster.local
+  service:
+    name: ef-elasticsearch-es-http
+    port: 9200
+    host: elasticsearch # adapt to your kyma cluster
+  rules:
+    - path: /.*
+      methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD"]
+      mutators:
+        - handler: header
+          config: {}
+      accessStrategies:
+        - handler: noop    
+---

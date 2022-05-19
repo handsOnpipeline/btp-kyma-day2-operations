@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: day2-service
+  name: day2-service
+  namespace: day2-operations
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: day2-service
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: day2-service
+        sidecar.istio.io/inject: "false" # disable istio injection, otherwise facing "connection reset by peer" error
+    spec:
+      imagePullSecrets:
+        - name: registry-secret
+      containers:
+      - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        name: day2-service
+        imagePullPolicy: Always
+        resources: {}
+        env:
+        - name: DB_SQLENDPOINT
+          valueFrom:
+            secretKeyRef:
+              key: db.sqlendpoint
+              name: application.properties
+        - name: DB_ADMIN
+          valueFrom:
+            secretKeyRef:
+              key: db.admin
+              name: application.properties
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: db.password
+              name: application.properties
+        - name: DBSERVICE_JMX_HOST
+          valueFrom:
+            secretKeyRef:
+              key: dbservice.jmx.host
+              name: application.properties
+        - name: DBSERVICE_JMX_PORT
+          valueFrom:
+            secretKeyRef:
+              key: dbservice.jmx.port
+              name: application.properties
+---
+apiVersion: v1
+kind: Service
+metadata:  
+  labels:
+    app: day2-service
+  name: day2-service
+  namespace: day2-operations
+spec:
+  ports:
+  - name: 8091-8091    
+    port: 8091
+    protocol: TCP
+    targetPort: 8091
+  selector:
+    app: day2-service
+  type: ClusterIP

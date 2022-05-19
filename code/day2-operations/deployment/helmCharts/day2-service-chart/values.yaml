@@ -1,0 +1,8 @@
+db:
+  sqlendpoint: "<db-sqlendpoint>"
+  admin: "<db-admin>"
+  password: "<db-password>"
+
+image:
+  repository: "<image-name>"
+  tag: "<image-tag>"

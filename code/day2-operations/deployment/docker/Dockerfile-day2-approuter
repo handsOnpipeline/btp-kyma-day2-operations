@@ -1,0 +1,14 @@
+FROM node:14
+
+WORKDIR /app
+
+COPY code/day2-operations/source/day2-approuter/package.json .
+RUN npm install
+
+COPY code/day2-operations/source/day2-approuter/xs-app.json .
+
+EXPOSE 5000
+
+# Belos is using approuter as standalone application
+CMD ["npm", "start"]
+

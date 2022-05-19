@@ -1,0 +1,140 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: day2-approuter
+  namespace: day2-operations
+spec:
+  selector:
+    matchLabels:
+      app: day2-approuter
+  template:
+    metadata:
+      labels:
+        app: day2-approuter
+    spec:
+      imagePullSecrets:
+        - name: registry-secret # replace with your own registry secret
+      containers:
+      - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        name: day2-approuter
+        env:
+        - name: destinations
+          valueFrom: 
+            configMapKeyRef:
+              name: destinations-config
+              key: destinations
+        - name: CLUSTER_DOMAIN
+          valueFrom:
+            configMapKeyRef:
+              key: cluster-domain
+              name: cluster-domain        
+        volumeMounts:
+        - name: xsuaa-volume
+          mountPath: "/etc/secrets/sapcp/xsuaa/xsuaaserviceinstance"
+          readOnly: true
+      volumes:
+        - name: xsuaa-volume
+          secret:
+            secretName: xsuaa-service-binding
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: day2-approuter
+  namespace: day2-operations
+  labels:
+    app: day2-approuter
+spec:
+  type: NodePort
+  ports:
+  - port: 5000
+  selector:
+    app: day2-approuter
+---
+apiVersion: gateway.kyma-project.io/v1alpha1
+kind: APIRule
+metadata:
+  name: day2-approuter-apirule
+  namespace: day2-operations
+spec:
+  gateway: kyma-gateway.kyma-system.svc.cluster.local
+  service:
+    name: day2-approuter
+    port: 5000
+    host: day2-ui # url for provider subaccount, adapt to your own subdomain
+  rules:
+    - path: /.*
+      methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD"]
+      mutators:
+        - handler: header
+          config:
+            headers:
+              x-forwarded-host: day2-ui.{{ .Values.clusterdomain }} # adapt to your Kyma cluster
+      accessStrategies:
+        - handler: noop    
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: destinations-config
+  namespace: day2-operations
+data:
+# two alternatives: # adapt to your Kyma cluster
+#   1. use (external) service url provided by Kyma APIRule (JWT enabled) (see application "deployment.yaml" APIRule)
+  # destinations: |
+  #   [
+  #     {"name":"broker","url":"https://broker.<cluster-domain>","forwardAuthToken" : true}
+  #   ]
+#   2. use cluster internal service url:  note that internal service naming follows http://<service-name>.<namespace>.svc.cluster.local:<service-port>
+#  make sure "namespace" of the broker is adapted when deploying to different namespace
+  destinations: |
+    [      
+      {"name":"ui","url":"http://day2-ui.day2-operations.svc.cluster.local:80","forwardAuthToken" : true},
+      {"name":"day2-service","url":"http://day2-service.day2-operations.svc.cluster.local:8091","forwardAuthToken" : true}
+    ] 
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-domain
+  namespace: day2-operations
+data:
+  cluster-domain: {{ .Values.clusterdomain }}  ## adapt to your Kyma cluster
+---
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceInstance
+metadata:
+  name: xsuaa-service
+  namespace: day2-operations
+spec:
+  clusterServiceClassExternalName: xsuaa
+  clusterServicePlanExternalName: broker # https://jam4.sapjam.com/blogs/show/2dxT4cVGxTXZRJT0D1DQQM
+  parameters:
+    xsappname: day2-operations
+    tenant-mode: dedicated # use "shared" for multi-tenant application
+    scopes:
+      - name: $XSAPPNAME.operator
+        description: Easy Franchise Day 2 Operator      
+    role-templates:
+      - name: operator
+        description: Easy Franchise Day 2 Operator Role-Template
+        scope-references: [$XSAPPNAME.operator]      
+    role-collections:
+      - name: Easy Franchise Day 2 Operator
+        description: Easy Franchise day 2 Operator Role-Collection
+        role-template-references: [$XSAPPNAME.operator]         
+    oauth2-configuration:
+      redirect-uris: 
+      - https://*.{{ .Values.clusterdomain }}/**
+      - http://localhost:5000/login/callback
+      token-validity:  900
+---
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceBinding
+metadata:
+  name: xsuaa-service-binding
+  namespace: day2-operations
+spec:
+  instanceRef:
+    name: xsuaa-service
+---

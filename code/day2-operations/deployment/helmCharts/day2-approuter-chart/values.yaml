@@ -1,0 +1,5 @@
+clusterdomain: "<cluster-domain>"
+
+image:
+  repository: "<image-name>"
+  tag: "<image-tag>"

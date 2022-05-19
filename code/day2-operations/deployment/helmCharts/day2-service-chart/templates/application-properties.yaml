@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: application.properties
+  namespace: day2-operations
+type: Opaque
+stringData:
+    db.sqlendpoint: {{ .Values.db.sqlendpoint }}
+    db.admin: {{ .Values.db.admin }}
+    db.password: {{ .Values.db.password }}
+    dbservice.jmx.host: db-jmx-metrics.integration.svc.cluster.local
+    dbservice.jmx.port: "9999" 

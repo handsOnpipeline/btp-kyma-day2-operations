@@ -1,0 +1,37 @@
+{ 
+	"welcomeFile": "/ui/index.html", 
+	"routes": [ 
+        {
+            "source": "^/day2-service/(.*)$",
+            "target": "$1",
+            "destination": "day2-service",
+            "scope": ["$XSAPPNAME.operator"]
+        },   
+        {
+            "source": "^/ui/(.*)$",
+            "target": "$1",
+            "destination": "ui",
+            "scope": ["$XSAPPNAME.operator"]
+        },
+        {
+            "source": "^/prometheus/metrics/(.*)$",
+            "destination": "day2-service",
+            "authenticationType": "none"
+        },
+        {
+            "source": "^/css/(.*)$",
+            "destination": "ui",
+            "authenticationType": "none"
+        },
+        {
+            "source": "^/js/(.*)$",
+            "destination": "ui",
+            "authenticationType": "none"
+        },
+        {
+            "source": "^/img/(.*)$",
+            "destination": "ui",
+            "authenticationType": "none"
+        }        
+	] 
+}
