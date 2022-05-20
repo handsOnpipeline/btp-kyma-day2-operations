@@ -105,15 +105,15 @@ cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed 
 
 PROJECT=day2-approuter
 log "Step 2.13 - Deploy $PROJECT"
-helm upgrade "$PROJECT" "/day2-operations/deployment/helmCharts/day2-approuter-chart" --install --namespace "day2-operations" --set clusterdomain="$CLUSTER_DOMAIN" --set image.repository="$BTPSA_KYMA_IMAGE_NAME_DAY2_SERVICE" --set image.tag="$BTPSA_KYMA_IMAGE_TAG" --wait --timeout 300s --atomic
+helm upgrade "$PROJECT" "/home/user/tutorial/code/day2-operations/deployment/helmCharts/day2-approuter-chart" --install --namespace "day2-operations" --set clusterdomain="$CLUSTER_DOMAIN" --set image.repository="$BTPSA_KYMA_IMAGE_NAME_DAY2_SERVICE" --set image.tag="$BTPSA_KYMA_IMAGE_TAG" --wait --timeout 300s --atomic
 
 PROJECT=day2-ui
 log "Step 2.14 - Deploy $PROJECT"
-helm upgrade "$PROJECT" "/day2-operations/deployment/helmCharts/day2-ui-chart" --install --namespace "day2-operations" --set image.repository="$BTPSA_KYMA_IMAGE_NAME_DAY2_UI" --set image.tag="$BTPSA_KYMA_IMAGE_TAG" --wait --timeout 300s --atomic
+helm upgrade "$PROJECT" "/home/user/tutorial/code/day2-operations/deployment/helmCharts/day2-ui-chart" --install --namespace "day2-operations" --set image.repository="$BTPSA_KYMA_IMAGE_NAME_DAY2_UI" --set image.tag="$BTPSA_KYMA_IMAGE_TAG" --wait --timeout 300s --atomic
 
 PROJECT=day2-service
 log "Step 2.15 - Deploy $PROJECT"
-helm upgrade "$PROJECT" "/day2-operations/deployment/helmCharts/day2-service-chart" --install --namespace "day2-operations" --set db.sqlendpoint="$DB_SQLENDPOINT" --set db.admin="$DB_ADMIN" --set db.password="$DB_ADMIN_PASSWORD" --set image.repository="$BTPSA_KYMA_IMAGE_NAME_DAY2_SERVICE" --set image.tag="$BTPSA_KYMA_IMAGE_TAG" --wait --timeout 300s --atomic  
+helm upgrade "$PROJECT" "/home/user/tutorial/code/day2-operations/deployment/helmCharts/day2-service-chart" --install --namespace "day2-operations" --set db.sqlendpoint="$DB_SQLENDPOINT" --set db.admin="$DB_ADMIN" --set db.password="$DB_ADMIN_PASSWORD" --set image.repository="$BTPSA_KYMA_IMAGE_NAME_DAY2_SERVICE" --set image.tag="$BTPSA_KYMA_IMAGE_TAG" --wait --timeout 300s --atomic  
 
 echo
 log "####################################################################################################"
