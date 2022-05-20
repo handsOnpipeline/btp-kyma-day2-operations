@@ -302,7 +302,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-day2-ui
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-day2-approuter
       - name: Build Docker image
         uses: docker/build-push-action@v2.10.0
         with:
@@ -336,7 +336,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-day2-approuter
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-day2-ui
       - name: Build Docker image
         uses: docker/build-push-action@v2.10.0
         with:
