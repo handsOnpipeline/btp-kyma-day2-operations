@@ -73,35 +73,43 @@ echo
 
 PROJECT=approuter
 log "Step 2.5 - Deploy $PROJECT"
-cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_APPROUTER:$BTPSA_KYMA_IMAGE_TAG~g" | sed "s~<provider-subdomain>~$SUBDOMAIN~g" | sed "s~<cluster-domain>~$CLUSTER_DOMAIN~g" | kubectl apply -f -
+FULL_NAME=$BTPSA_KYMA_IMAGE_NAME_APPROUTER:$BTPSA_KYMA_IMAGE_TAG
+cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$FULL_NAME~g" | sed "s~<provider-subdomain>~$SUBDOMAIN~g" | sed "s~<cluster-domain>~$CLUSTER_DOMAIN~g" | kubectl apply -f -
 
 PROJECT=db-service
+FULL_NAME=$BTPSA_KYMA_IMAGE_NAME_DB_SERVICE:$BTPSA_KYMA_IMAGE_TAG
 log "Step 2.6 - Deploy $PROJECT"
-cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_DB_SERVICE:$BTPSA_KYMA_IMAGE_TAG~g" | kubectl apply -f -
+cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$FULL_NAME~g" | kubectl apply -f -
 
 PROJECT=bp-service
+FULL_NAME=$BTPSA_KYMA_IMAGE_NAME_BP_SERVICE:$BTPSA_KYMA_IMAGE_TAG
 log "Step 2.7 - Deploy $PROJECT"
-cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_BP_SERVICE:$BTPSA_KYMA_IMAGE_TAG~g" | kubectl apply -f -
+cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$FULL_NAME~g" | kubectl apply -f -
 
 PROJECT=ef-service
+FULL_NAME=$BTPSA_KYMA_IMAGE_NAME_EF_SERVICE:$BTPSA_KYMA_IMAGE_TAG
 log "Step 2.8 - Deploy $PROJECT"
-cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_EF_SERVICE:$BTPSA_KYMA_IMAGE_TAG~g" | kubectl apply -f -
+cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$FULL_NAME~g" | kubectl apply -f -
 
 PROJECT=broker
+FULL_NAME=$BTPSA_KYMA_IMAGE_NAME_BROKER:$BTPSA_KYMA_IMAGE_TAG
 log "Step 2.9 - Deploy $PROJECT"
-cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_BROKER:$BTPSA_KYMA_IMAGE_TAG~g" | kubectl apply -f -
+cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$FULL_NAME~g" | kubectl apply -f -
 
 PROJECT=email-service
+FULL_NAME=$BTPSA_KYMA_IMAGE_NAME_EMAIL_SERVICE:$BTPSA_KYMA_IMAGE_TAG
 log "Step 2.10 - Deploy $PROJECT"
-cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_EMAIL_SERVICE:$BTPSA_KYMA_IMAGE_TAG~g" | kubectl apply -f -
+cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$FULL_NAME~g" | kubectl apply -f -
 
 PROJECT=ui
+FULL_NAME=$BTPSA_KYMA_IMAGE_NAME_UI:$BTPSA_KYMA_IMAGE_TAG
 log "Step 2.11 - Deploy $PROJECT"
-cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_UI:$BTPSA_KYMA_IMAGE_TAG~g" | kubectl apply -f -
+cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$FULL_NAME~g" | kubectl apply -f -
 
 PROJECT=business-partner-mock
+FULL_NAME=$BTPSA_KYMA_IMAGE_NAME_BUSINESS_PARTNER_MOCK:$BTPSA_KYMA_IMAGE_TAG
 log "Step 2.12 - Deploy $PROJECT"
-cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_BUSINESS_PARTNER_MOCK:$BTPSA_KYMA_IMAGE_TAG~g" | kubectl apply -f -
+cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$FULL_NAME~g" | kubectl apply -f -
 
 PROJECT=day2-approuter
 log "Step 2.13 - Deploy $PROJECT"
