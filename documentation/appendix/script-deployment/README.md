@@ -1,6 +1,6 @@
 # Build a Script to Automate the Deployment
 
-In the setup folder, there is a shell script [full-deployment.sh](/setup/full-deployment.sh). Calling the script will guide you through the whole deployment of the application. There is also the option to do a dry run in order to validate the yaml files that will be used for deployment. 
+In the setup folder, there is a shell script [full-deployment.sh](../../../code/setup/full-deployment.sh). Calling the script will guide you through the whole deployment of the application. There is also the option to do a dry run in order to validate the yaml files that will be used for deployment. 
 
 ## Preparation
 
@@ -9,7 +9,7 @@ If you run through the manual deployment before, revert the changes you have don
 
 ## Deployment Script
 
-Execute build script from within the [setup folder](/setup): 
+Execute build script from within the [setup folder](../../../code/setup/): 
 
 ```shell
 ./full-deployment.sh

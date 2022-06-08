@@ -45,7 +45,7 @@ It is also possible to scrape metrics exposed by either Kyma endpoint or your ap
 
 To illustrate exposing custom metrics in [Prometheus format](https://prometheus.io/docs/concepts/data_model/#metric-names-and-labels) through your own application, we provide following example.  
 
-- [C3P0 DB connection pool metrics](/code/day2-operations/source/day2-service/src/main/java/dev/kyma/samples/easyfranchise/day2/rest/jmx/C3P0ConnectionPoolMetricsScheduler.java) implemented using [Prometheus Java client](https://github.com/prometheus/client_java). In our DB-service [c3p0 pool](https://www.mchange.com/projects/c3p0/) is used to access EasyFranchise database.  We collected following metrics to provide real time monitoring of database connecion usage for each of the subscribed tenant.
+- [C3P0 DB connection pool metrics](../../../code/day2-operations/source/day2-service/src/main/java/dev/kyma/samples/easyfranchise/day2/rest/jmx/C3P0ConnectionPoolMetricsScheduler.java) implemented using [Prometheus Java client](https://github.com/prometheus/client_java). In our DB-service [c3p0 pool](https://www.mchange.com/projects/c3p0/) is used to access EasyFranchise database.  We collected following metrics to provide real time monitoring of database connecion usage for each of the subscribed tenant.
 
   - db_number_connections_all_users
   - db_number_idle_connections_all_users
@@ -104,7 +104,7 @@ db_number_connections_all_users{Tenant="CITY-SCOOTER",} 10.0
                 - targets:
                   - 'day2-service.day2-operations.svc.cluster.local:8091'               
 ```
-The complete file *otel-agent-mtls.yaml* with above configuration can be found at [here](/code/day2-operations/deployment/k8s/otel-agent-mtls.yaml)
+The complete file *otel-agent-mtls.yaml* with above configuration can be found at [here](../../../code/day2-operations/deployment/k8s/otel-agent-mtls.yaml)
 
 3. With *Dynatrace exporter* from OpenTelemetry collector the metrics are forwarded to Dynatrace instance.  In Dynatrace you can create dashboard based on above custom metrics. 
 
@@ -135,7 +135,7 @@ The flow of retrieving C3P0 connection pool metrics is discussed in previous sec
 
 ```
 
-- To enable access to *db-service* JMX port, simply adapt following command line parameters in the [Dockerfile-db-service](/code/easyfranchise/deployment/docker/Dockerfile-db-service).
+- To enable access to *db-service* JMX port, simply adapt following command line parameters in the [Dockerfile-db-service](../../../code/easyfranchise/deployment/docker/Dockerfile-db-service).
 
 ```Diff
 
@@ -149,7 +149,7 @@ The flow of retrieving C3P0 connection pool metrics is discussed in previous sec
 +CMD ["java", "-Dcom.sun.management.jmxremote.port=9999", "-Dcom.sun.management.jmxremote.authenticate=false", "-Dcom.sun.management.jmxremote.ssl=false", "-cp",  "/opt/app/*", "dev.kyma.samples.easyfranchise.ServerApp", "8080"] 
 ```
 
-Enable jmx port access within cluster by adding following configuration to [db-service.yaml](/code/easyfranchise/deployment/k8s/db-service.yaml)
+Enable jmx port access within cluster by adding following configuration to [db-service.yaml](../../../code/easyfranchise/deployment/k8s/db-service.yaml)
 
 ```yaml
 ---

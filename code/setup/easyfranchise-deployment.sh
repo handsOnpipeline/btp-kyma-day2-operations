@@ -39,7 +39,7 @@ function usage {
 write_config() {
   rawjson="{ \"subdomain-id\": \"$SUBDOMAIN\", \"cluster-domain\": \"$CLUSTER_DOMAIN\", \"kubeconfig-url\": \"$KUBECONFIG_URL\", \
    \"docker-email\": \"$DOCKER_EMAIL\", \"docker-id\": \"$DOCKER_ID\", \"docker-server\": \"$DOCKER_SERVER\", \"docker-repository\": \"$DOCKER_REPOSITORY\", \"docker-password\": \"$DOCKER_PASSWORD\", \
-   \"db-sqlendpoint\": \"$DB_SQLENDPOINT\", \"db-admin\": \"$DB_ADMIN\", \"db-admin-password\": \"$DB_ADMIN_PASSWORD\"}"
+   \"db-sqlendpoint\": \"$DB_SQLENDPOINT\", \"db-admin\": \"$DB_ADMIN\", \"db-admin-password\": \"$DB_ADMIN_PASSWORD\", \"db-metering-user\": \"$DB_METERING_USER\", \"db-metering-password\": \"$DB_METERING_PASSWORD\"}"
   echo "$rawjson" | jq '.' >$configfile
 }
 
@@ -61,6 +61,11 @@ read_config() {
   DB_SQLENDPOINT=$(jq -r '."db-sqlendpoint"' <<< "${result}")
   DB_ADMIN=$(jq -r '."db-admin"' <<< "${result}")
   DB_ADMIN_PASSWORD=$(jq -r '."db-admin-password"' <<< "${result}")
+
+  #HANA Cloud Metering
+  DB_METERING_USER=$(jq -r '."db-metering-user"' <<< "${result}")
+  DB_METERING_PASSWORD=$(jq -r '."db-metering-password"' <<< "${result}")
+
 }
 
 function buildDeploy() {  
@@ -148,6 +153,11 @@ query_parameters() {
 
   log "Enter DB Admin Password: " 
   read -s -r DB_ADMIN_PASSWORD
+
+  # Needed for combatability to day2 deployment script
+  DB_METERING_USER="$DB_ADMIN"
+  DB_METERING_PASSWORD="$DB_ADMIN_PASSWORD"
+
   echo ""
   echo ""
 }

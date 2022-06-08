@@ -68,7 +68,7 @@ function usage {
 write_config() {
   rawjson="{ \"subdomain-id\": \"$SUBDOMAIN\", \"cluster-domain\": \"$CLUSTER_DOMAIN\", \"kubeconfig-url\": \"$KUBECONFIG_URL\", \
    \"docker-email\": \"$DOCKER_EMAIL\", \"docker-id\": \"$DOCKER_ID\", \"docker-server\": \"$DOCKER_SERVER\", \"docker-repository\": \"$DOCKER_REPOSITORY\", \"docker-password\": \"$DOCKER_PASSWORD\", \
-   \"db-sqlendpoint\": \"$DB_SQLENDPOINT\", \"db-admin\": \"$DB_ADMIN\", \"db-admin-password\": \"$DB_ADMIN_PASSWORD\"}"
+   \"db-sqlendpoint\": \"$DB_SQLENDPOINT\", \"db-admin\": \"$DB_ADMIN\", \"db-admin-password\": \"$DB_ADMIN_PASSWORD\", \"db-metering-user\": \"$DB_METERING_USER\", \"db-metering-password\": \"$DB_METERING_PASSWORD\"}"
   echo "$rawjson" | jq '.' >$configfile
 }
 
@@ -91,6 +91,10 @@ read_config() {
   DB_SQLENDPOINT=$(jq -r '."db-sqlendpoint"' <<< "${result}")
   DB_ADMIN=$(jq -r '."db-admin"' <<< "${result}")
   DB_ADMIN_PASSWORD=$(jq -r '."db-admin-password"' <<< "${result}")
+
+  #HANA Cloud Metering
+  DB_METERING_USER=$(jq -r '."db-metering-user"' <<< "${result}")
+  DB_METERING_PASSWORD=$(jq -r '."db-metering-password"' <<< "${result}")
 }
 
 function buildDeployOperationService() { 
@@ -114,7 +118,7 @@ function buildDeployOperationService() {
     echo
 
     log "$OP_SERVICE_PROJECT: Deploy image"
-    helm upgrade "$OP_SERVICE_PROJECT" "$OP_HELM_CHART" --install --namespace "$NAMESPACE" --set db.sqlendpoint="$DB_SQLENDPOINT" --set db.admin="$DB_ADMIN" --set db.password="$DB_ADMIN_PASSWORD" --set image.repository="$IMAGE_NAME" --set image.tag="$IMAGE_TAG" --wait --timeout 300s --atomic  
+    helm upgrade "$OP_SERVICE_PROJECT" "$OP_HELM_CHART" --install --namespace "$NAMESPACE" --set db.sqlendpoint="$DB_SQLENDPOINT" --set db.admin="$DB_METERING_USER" --set db.password="$DB_METERING_PASSWORD" --set image.repository="$IMAGE_NAME" --set image.tag="$IMAGE_TAG" --wait --timeout 300s --atomic  
     echo
   else
     log "Dry Run: Skipping build"
@@ -256,7 +260,24 @@ query_parameters() {
   log "Enter DB Admin Password: " 
   read -s -r DB_ADMIN_PASSWORD
   echo ""
+  
+  continue_prompt_bool "Use the same DB credentials for the metering schema"
+  doit=$retval
+  echo "$doit"
+  if [ "$doit" = true ]; then
+    DB_METERING_USER="$DB_ADMIN"
+    DB_METERING_PASSWORD="$DB_ADMIN_PASSWORD"
+   else
+    log "Enter DB User for Metering: " 
+    read -r DB_METERING_USER
+
+    log "Enter DB Password for Metering User: " 
+    read -s -r DB_METERING_PASSWORD  
+  fi
+
   echo ""
+  echo ""
+
 }
 
 # user selection via passed array
@@ -357,6 +378,8 @@ log "HANA Cloud"
 log "SQL Endpoint: " "$DB_SQLENDPOINT"
 log "DB Admin: " "$DB_ADMIN"
 log "DB Admin Password: ********"
+log "DB User for Metering: " "$DB_METERING_USER"
+log "DB Password for Metering: ********"
 echo ""
 echo ""
 read -p "Continue with deployment? (y/n) " -n 1 -r
