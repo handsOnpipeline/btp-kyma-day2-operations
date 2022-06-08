@@ -1,34 +1,34 @@
-# Run the Metering Scenario End-to-End Locally
+# Run the Metering Scenario End-2-End Locally
  
 This chapter explains the steps to run all services involved in the metering scenario locally. This can be done on Windows, Mac or Linux.
 
-You can use these services locally: 
-* Database service
-* Easy Franchise service
-* Business Partner service
-* Day2 service
-* Easy Franchise UI
-* Metering Dashboard UI
+TODO Math: add Solution Digramm with all relevant services 
 
-![](../images/easy-franchise-metering/Slide11.jpeg)
+Here the list of Services to be stated locally: 
+* Database Service
+* Easy Franchise Service
+* Business Partner Service
+* Day2 Service
+* Easyfranchise UI
+* Metering Dashboard UI
 
 ## Start the Database Service, the Easy Franchise Service, and the Business Partner Service
 
 ### Prerequisites
 - You have prepared the SAP HANA Cloud properties for a JDBC connection. 
-- You have a SAP S/4HANA Cloud system or a Business Partner mock server up and running 
+- You have an SAP S/4HANA Cloud system or a Business Partner mock server up and running 
 <!-- TODO: give details where to find info if this is not done -->
 
-### Configure the hiddenconfig.properties File
+### Configure hiddenconfig.properties file
 
-To run locally the services listed above, you have to configure some properties in the `hiddenconfig.properties` file:
-1. Open the prepared sources from the previous steps or download the final one from the GitHub [Repository](https://github.com/SAP-samples/btp-kyma-multitenant-extension-day2/tree/day2-final/code/easyfranchise/source/backend). In the **day2-final** branch, you will find the source in the [code/easyfranchise/source/backend](https://github.com/SAP-samples/btp-kyma-multitenant-extension-day2/tree/day2-final/code/easyfranchise/source/backend) folder.
+To run those services locally, you have to configure some properties in a `hiddenconfig.properties` file:
+1. Open the prepared sources from the previous steps or download the final once from the GitHub [Repository](https://github.com/SAP-samples/btp-kyma-multitenant-extension-day2/tree/day2-final/code/easyfranchise/source/backend). In Branch **day2-final** you find the source in folder [code/easyfranchise/source/backend](https://github.com/SAP-samples/btp-kyma-multitenant-extension-day2/tree/day2-final/code/easyfranchise/source/backend).
    
 <!-- TODO check if this link works! -->
 
 1. Copy the file ```code/backend/shared-code/src/main/resources/hiddenconfig-template.properties``` to `hiddenconfig.properties` in the same folder.
 
-1. Maintain your SAP HANA Cloud JDBC connection properties in the `db.*` section. This should look like this: <!-- TODO needs mentioning of alternate DB user? (Because old docu recommends to create one...) -->
+1. Maintain your SAP HANA Cloud JDBC connection properties in the `db.*` section. This should look like this:
    ```
    db.name: EasyFranchiseHANADB
    db.sqlendpoint: your_hostname.hanacloud.ondemand.com:443
@@ -36,7 +36,7 @@ To run locally the services listed above, you have to configure some properties 
    db.password: your_efadmin_password
    ```
 
-   For more details, see [How to find JDBC Connection Properties](https://github.com/SAP-samples/btp-kyma-multitenant-extension/tree/main/documentation/prepare/configure-hana#how-to-find-jdbc-connection-properties).
+   See [How to find JDBC Connection Properties](https://github.com/SAP-samples/btp-kyma-multitenant-extension/tree/main/documentation/prepare/configure-hana#how-to-find-jdbc-connection-properties) for more details.
 
 1. Update the `s4hana.destination.*` properties.
 
@@ -50,7 +50,8 @@ To run locally the services listed above, you have to configure some properties 
    s4hana.destination.Type: http
    ```
 
-   If you use your SAP S/4HANA Cloud system, copy the following snippet. Be sure to update with your own values:
+   If you are using your SAP S/4HANA Cloud system, copy the following snippet updated with your values:
+
    ```
    s4hana.destination.URL: https://xxxxxxxx-api.s4hana.ondemand.com
    s4hana.destination.User: <your Communicatrion Arragement User>
@@ -58,14 +59,14 @@ To run locally the services listed above, you have to configure some properties 
    s4hana.destination.Authentication: BasicAuthentication
    s4hana.destination.Type: http
    ```
+### Build the project
+1. Open a command line window and change to directory to ```code/backend``` containing the main '''pom.xml'''. Run the following Maven command:
 
-### Build the Project
-1. Open a command prompt and change the directory to ```code/backend``` containing the main '''pom.xml'''. Run the following Maven command:
    ```mvn clean install```
 
    > Info: When running this command the first time, many JAR files will be downloaded to your local Maven repository.
 
-   The second run will be faster as all these downloads will no longer be necessary.
+   The second run will be faster as all these downloads will be no longer necessary.
 
    You should see a successful build of all four modules and an allover **BUILD SUCCESS**:
 
@@ -86,7 +87,7 @@ To run locally the services listed above, you have to configure some properties 
 
 ### Start All Backend Services
 
-1. Run the following commands to start the services. Start each in a separate command prompt and in the correct folder.
+1. Run the following commands to start the services. Start each in a separate command line window and in the correct folder.
 
    In folder [code/backend/ef-service](/code/backend/ef-service):
 
@@ -113,48 +114,49 @@ To run locally the services listed above, you have to configure some properties 
 
    Each service will run on a different port (8080, 8100, 8090). Don't use different ones. The `hiddenconfig.properties` relies on them!
 
-   >*Hint:* Just in case you want to debug one of the applications using port `8888`, you can start the Java process using the following command. Then, connect with your IDE to the external Java process on port `8888`.
+   >*Hint:* Just in case you want to debug one of the applications using port `8888` you can start the Java process using the following command. Then, connect with your IDE to the external Java process on port `8888`.
 
    >```
    >java -Xdebug -Xrunjdwp:transport=dt_socket,address=8888,server=y,suspend=y -cp "./target/*;./target/dependency/*" -Dlocal_dev=true dev.kyma.samples.easyfranchise.ServerApp <port>
    >```
 
-### Test the APIs
+### Test APIs
 
 1. Check that you can get all mentors:
    ``` 
    curl  --request GET 'http://localhost:8080/easyfranchise/rest/efservice/v1/mentor' 
    ```
 
-   > Note: If the request fails, check the logs of ```ef-service``` and ```db-service```.
+   > Note: If the request fails, check the logs of the ef-service and the db-service.
 
-1. Check that you can read franchisees.
+1. Check that you can read franchise
    ```
    curl --request GET 'http://localhost:8080/easyfranchise/rest/efservice/v1/franchisee' 
    ```
-   > Note: If the request fails, check the logs of ```ef-service``` and ```db-service```.
+   > Note: If the request fails, check the logs of the ef-service and the db-service.
 
 
 ## Run the Day2 Service
 
-1. Open ```http://localhost:8091``` in a browser to check if the Day2 service is already started. You should get: 
+1. Open ```http://localhost:8091``` in browser to check if the Operations Service is already started. You should get:
    
    ![](../images/operationsServiceStartPage.png)
-1. If the server is not started please start it now.
+1. If server is not started start him.
 
-## Run the Easy Franchise UI
+## Run the Easyfranchise UI
 
-1. Check that you have defined the URL path of the backend APIs to the local backend services. Open the file [code/easyfranchise/source/ui/src/main.js](/code/easyfranchise/) and check the value for ```Vue.prototype.$backendApi``` for: <!-- TODO check file path -->
+1. Check that you have defined the URL path of the backend apis to the local backend services. Open the file ```code/easyfranchise/source/ui/src/main.js](/code/easyfranchise/``` and check the value for ```Vue.prototype.$backendApi``` for:
+   
    ```js
    Vue.prototype.$backendApi = "http://localhost:8080/easyfranchise/rest/efservice/v1";
    ```
-1. Open a new terminal and change directory to **ui**.
+1. Open a new terminal and change directory to **ui** 
 
    ```shell
    $ cd ui
    ```
 
-1. Install Node.js modules in your repository by running:
+1. Install node modules in your repository by running:
 
    ```shell
    $ npm install
@@ -165,45 +167,47 @@ To run locally the services listed above, you have to configure some properties 
    ```shell
    $ npm run serve
    ```
-   As result the application should show where it's running. 
+   As result the app should show where its running. 
    By default this is at: 
 
    ```
    http://localhost:8081/
    ```
-1. Open this URL in a browser.
+1. Open this URL in the browser.
    
 ## Run the Metering Dashboard UI
 
-1. Open a command prompt and go to [code/metering-dashboard/source/ui](../../code/metering-dashboard/source/ui).
+1. Open a command window and go [code/metering-dashboard/source/ui](../../code/metering-dashboard/source/ui)
 
-1. Install the Node.js modules.
+1. Install NodeJs Modules
+    
    ```shell
    $ npm install
    ```
    
-1. Start the service.
+1. Start the Service
+ 
    ```shell
    $ npm run serve
    ```
    
-   As result the application should show where it's running. 
+   As result the app should show where its running. 
    By default this is at: 
 
    ```
    http://localhost:8082
    ```
-1. Open this URL in a browser.
+1. Open this URL in the browser.
 
-1. As you already logged in to the Easy Franchise service, which is using the tenant ID 123456789-local-tenant-id, you should find an according record. 
-
+1. As you already did logged in to the EasyFranchise service, which is using the tenantid 123456789-local-tenant-id, you should find an according record. 
+   
    ![](../images/meeteringDashboardLocaltenant.png)
 
-  <!-- TODO replace picture& texte above if we have subacount display name.-->
+   TODO replace picture& texte above if we have subacount display name.
 
-1. If you would like to see a second tenant or increase the number of active users, you can achieve this by : 
-   - Updating the properties ```devmode.tenantid``` in the ```hiddenconfig.properties``` of the backend services.  Stop, build and start the application again, so that the new tenant ID gets activated and reopen the Easy Franchise UI.
-   - (Optional) Running a REST call against the **Operations Service** via CURL command and fake a user login of, for example, "Jon Smith" for "second-local-tenant-id": 
+1. If you would like to see a second tenant or increase the number of active users you can reach this by : 
+   - update the properties ```devmode.tenantid``` in the ```hiddenconfig.properties``` of backend services.  Stop, build and restart again, so that the new tenantid gets activated and reopen the Easyfranchise ui
+   - much easier is to run a Rest Calls against the **Operations Service** via curl command and fake a user login of eg "Jon Smith" for "second-local-tenant-id": 
    
      ```shell
      curl --request PUT 'http://localhost:3000/user/login' \
@@ -211,17 +215,16 @@ To run locally the services listed above, you have to configure some properties 
      --data-raw '{"tenantid": "second-local-tenant-id", "user": "Jon Smith"}
      ```
      
-<!-- TODO: To be moved to Troubleshooting section -->
->**Troubleshooting hint: no active user metering values are shown** 
-> - Check in the console of the **Operations services** the return status of the ```user/metric``` call. In case it is 200 as shown in the screenshot below, you have forgotten to set the envitoment variable to indicate the local run. Set ```local_dev=true``` and restart the Opeations service. 
+<!-- TODO: To be moved to Trouble shooting section -->
+>**Trouble shooting hint: no active user metering values shown?** 
+> - Check in the console of the **Operations services** the return status of the ```user/metric``` call. In case it is 200 as shown in the screenshot below, you have forgotten to set the envitoment variable to indicate the local run. Set ```local_dev=true``` and restart the opeations service again. 
 >
 >   ![](../images/failingCrosUserMetricCall.png)
-> * Run the REST call against the Operations service (replace year and month!) and check the result and the logs. 
-
+> * Run the Rest call agains the Operations service (replace year and month!) and check the result and logs. 
 >   ```
 >   curl --request GET 'http://localhost:3000/user/metric?year=2022&month=3'
 >   ```
 
 ## Result
 
-* You understand now how to run a local test of all microservices and know the limitations of running the application locally. 
+* You understand now how to run a local test of all microservices and know the limitations of the local Run. 

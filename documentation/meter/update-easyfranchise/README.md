@@ -1,19 +1,17 @@
-# Update the Easy Franchise Application
+# Update the Easy Franchise App
 
-As mentioned in the previous chapter, the Easy Franchise application needs to be updated to call the API provided by the Day2 service once a user starts the application. 
-
+As mentioned in the previous chapter, the Easy Franchise needs to be updated to call the API provided by the Day2 service once an user starts the app. 
 
 ### Update the Easy Franchise Service
 
 > **Hint:** be aware that you can use the [final code]((../../../../day2-final/code/easyfranchise/source/backend/ef-service/)) from the branch **day2-final** if you encounter any issues.
 
 
-1. If you haven't already done this, clone the GitHub repository and navigate to the folder [backend](../../../code/easyfranchise/source/backend/) where you will find the respective code for the Easy Franchise application.
+1. If you didn't do it before, please clone the GitHub repository and navigate to the folder [backend](../../../code/easyfranchise/source/backend/) where you will find the respective code for the Easy Franchise app.
 
-1. Open the file [backend/ef-service/src/main/java/dev/kyma/samples/easyfranchise/EFService.java](../../../code/easyfranchise/source/backend/ef-service/src/main/java/dev/kyma/samples/easyfranchise/EFService.java) in your preferred editor.
+1. Open the file [backend/ef-service/src/main/java/dev/kyma/samples/easyfranchise/EFService.java](../../../code/easyfranchise/source/backend/ef-service/src/main/java/dev/kyma/samples/easyfranchise/EFService.java) in your perfered editor.
 
-1. Add some new methods within class **EFService** by pasting the following code to send the request to the API of the the Day2 app:
-
+1. Add a new method **meterUserLogin** and paste the following code to send the request to the API of the the Day2 app:
    ```java
    @PUT
    @Consumes(MediaType.APPLICATION_JSON)
@@ -91,18 +89,18 @@ As mentioned in the previous chapter, the Easy Franchise application needs to be
    }
    ```
 
-1. To make the application running locally, we use the file [hiddenconfig-template.properties](../../../code/easyfranchise/source/backend/shared-code/src/main/resources/hiddenconfig-template.properties) to store different properties. Copy this file and rename it to **hiddenconfig.properties**. 
+1. In to make the application running locally, we use the file [hiddenconfig-template.properties](../../../code/easyfranchise/source/backend/shared-code/src/main/resources/hiddenconfig-template.properties) to store different properties. First copy this file and rename it to **hiddenconfig.properties**. 
 
-1. Add the URL of the Day2 service as a property in the file **hiddenconfig.properties** so that the Easy Franchise service knows where to call the API. Here is the code that should be added:
+1. Then add the URL of the Day2 service as property in the file **hiddenconfig.properties** so that the Easy Franchise service knows where to call the API. Here is the code that should be added:
 
    ```properties
    metering.operations.service: http://localhost:8091/
    ```
 
-### Implementation Alternative with AppRouter
+### Understand an Alternative Way to Get the User Via Header
 
-In the above Java implementation, we select the bearer token and do the base64 decoding in Java. In the Approuter file [app.js](../../../code/metering-dashboard/source/operation-service/app.js) we already do a decoding, which can be reused. 
-You can create a new header **x-user-id** with the user info as shown in the below code snipped:
+In the above JAVA implementation, we select the bearer token and do the base64 decoding in JAVA. In the AppRouter file [app.js](../../../code/metering-dashboard/source/operation-service/app.js) we already do a decoding, which can be reused. 
+You can create a new header **x-user-id** with the user info as shown in the below code snipped
 
 ```js
 ar.beforeRequestHandler.use('/backend', function (req, res, next) {
@@ -124,8 +122,7 @@ ar.beforeRequestHandler.use('/backend', function (req, res, next) {
 });
 ```
 
-With the above changes in the Approuter, the Java code for getting the user details would be then reduced to reading the header as follow:
-
+With the above changes in the AppRouter, the JAVA code for getting the user details would be then reduce to reading the header as follow:
 ```java
  public static String getUser(HttpHeaders httpHeaders) throws Exception {
    return httpHeaders.getHeaderString("x-user-id");
@@ -134,11 +131,11 @@ With the above changes in the Approuter, the Java code for getting the user deta
 
 ## Update the UI
 
-The UI is responsible to trigger and inform the Easy Franchsie service about a new login. 
+The UI is responsible to trigger and inform the Easy Franchsie Service about a new login. 
 
-1. Open the file [easyfranchise/source/ui/src/App.vue](../code/easyfranchise/source/ui/src/App.vue) in your preferred editor. 
+1. Open the file [easyfranchise/source/ui/src/App.vue](../code/easyfranchise/source/ui/src/App.vue) in your prefered editor. 
 
-1. Add a new function called **LogUser** to call the API of the Easy Franchise service. This can be added under ```methods: { }``` . Here is the code:  
+1. Add a new function called **LogUser** to call the API of the Easy Franchise Service. This can be added under ```methods: { }``` . Here is the code:  
    ```
     // Calling Metering API to register the user
     logUser(){
@@ -158,7 +155,7 @@ The UI is responsible to trigger and inform the Easy Franchsie service about a n
     },
    ```
 
-1. Now we need to adapt the UI so that this method can been called every time the application is started. We are doing it by calling the method every time the UI is mounted. Search for the following section:   
+1. Now we need to adapt the UI so that this method can been called everytime the application is started. We are doing it by calling the method everytime the UI is mounted. Search for the following section:   
    ```
    mounted: function() {
      this.loadAllFranchises();
@@ -167,18 +164,11 @@ The UI is responsible to trigger and inform the Easy Franchsie service about a n
    }
    ```  
    
-1. Add the previously created method ``this.logUser();`` to the mount fuuntion as follow:   
+1. Add the previous created method as follow:  
    ```
-   mounted: function() {
-     this.loadAllFranchises();
-     this.loadAllCoordinators();
-     this.checkandFillCompanyDetails();
-     this.logUser();
-   }
+   this.logUser();
    ```
    
 ## Result
-
-* You have implemented a new REST endpoint called **meter-user-login** in the Easy Franchise service. 
-* You have updated the UI so that it calls the Easy Franchise API **meter-user-login** once the application is started.
-
+* You have implemented a new REST Endpoint called **meter-user-login** in the Easy Franchise service. 
+* You have updated the UI so that it calls the Easy Franchise API **meter-user-login** once the app is started.

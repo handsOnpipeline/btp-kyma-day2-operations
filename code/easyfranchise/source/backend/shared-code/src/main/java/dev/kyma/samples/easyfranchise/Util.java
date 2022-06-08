@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
+import java.util.Base64;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
 
@@ -12,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.kyma.samples.easyfranchise.communication.Destination;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.HttpHeaders;
@@ -30,6 +35,7 @@ public class Util {
     private static String DB_SERVICE = "db.service";
     private static String DB_ADMIN_SERVICE = "db.admin.service";
     private static String EMAIL_SERVICE = "email.service";
+    private static String METERING_OPERATIONS_SERVICE= "day2.service";
     private static String SCHEDULER_SERVICE_AUTO_START = "scheduler.auto.start";
     private static String S4HANA_DESTINATION_PROPERTY_NAME = "s4hana.destination";
 
@@ -120,6 +126,11 @@ public class Util {
     public static String getDBAdminServiceUrl() {
         Properties p = readProperties(BACKEND_CONFIG_PATH);
         return p.getProperty(DB_ADMIN_SERVICE);
+    }
+    
+    public static String getMeteringOperationServiceUrl() {
+        Properties p = readProperties(BACKEND_CONFIG_PATH);
+        return p.getProperty(METERING_OPERATIONS_SERVICE);
     }
 
     public static String getDBSqlEndpoint() {

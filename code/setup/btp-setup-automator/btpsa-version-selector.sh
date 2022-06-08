@@ -40,12 +40,12 @@ VARIANT_NUMBER="$retval"
 
 case $VARIANT_NUMBER in
   1)	
-    BTPSA_KYMA_IMAGE_TAG="main"
+    BTPSA_KYMA_DEPLOYMENT_VARIANT="main"
   ;;&    
   2)
-    BTPSA_KYMA_IMAGE_TAG="final"
+    BTPSA_KYMA_DEPLOYMENT_VARIANT="final"
   ;;          
 esac
 
-log "Deployment will be performed from branch $BTPSA_KYMA_IMAGE_TAG"
+log "Deployment will be performed from branch $BTPSA_KYMA_DEPLOYMENT_VARIANT"
 

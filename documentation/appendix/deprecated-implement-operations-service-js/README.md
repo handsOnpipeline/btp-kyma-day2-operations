@@ -2,8 +2,8 @@
 
 ## Recap the Architecture
 
-![](../images/easy-franchise-metering/Slide3.jpeg)
-<!-- TODO: update picture with a focus one -->
+![](../images/easy-franchise-metering/Slide3.JPG)
+TODO: update picture with a focus one
 
 The **Operations Service** is called by the **EasyFranchise Service** and the Dashboard UI. 
 
@@ -115,7 +115,7 @@ Before test-runing the **Operations Service**, a new database user has to be cre
 1. You should have already a HANA database created and know the according database admin user. Recheck chapter [Prepare](/documentation/prepare/README.md).
 2. Open the **SAP HANA Database Explorer**:
    
-  <!-- TODO add pictue here -->
+   TODO add pictue here
 3. Run the follwoing sql, after you have replaced the ```<password>``` with a concret one to create a new **EFMETERINGADMIN**: 
 
    ```sql

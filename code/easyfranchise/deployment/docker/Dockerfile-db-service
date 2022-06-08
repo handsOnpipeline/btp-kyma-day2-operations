@@ -18,4 +18,6 @@ COPY --from=BUILDER /opt/app/db-service/target/db-service.jar /opt/app/db-servic
 COPY --from=BUILDER /opt/app/db-service/target/dependency/* /opt/app/
 ENV JAVA_OPTS=""
 EXPOSE 8080
-CMD ["java", "-cp",  "/opt/app/*", "dev.kyma.samples.easyfranchise.ServerApp", "8080"]    
+EXPOSE 9999
+
+CMD ["java", "-Dcom.sun.management.jmxremote.port=9999", "-Dcom.sun.management.jmxremote.authenticate=false", "-Dcom.sun.management.jmxremote.ssl=false", "-cp",  "/var/app/*", "dev.kyma.samples.easyfranchise.ServerApp", "8080"]

@@ -7,28 +7,6 @@ log() {
   echo -e "${yellow}$*${no_color}"
 }
 
-# user selection via passed array
-# return ( index value)
-createmenu() {
-  #echo "Size of array: $#"
-  #echo "$@"
-  select option; do # in "$@" is the default
-    if [ "$REPLY" -eq "$#" ];
-    then
-      #echo "Exiting..."
-      break;
-    elif [ 1 -le "$REPLY" ] && [ "$REPLY" -le $(($#-1)) ];
-    then
-      #echo "You selected $option which is option $REPLY"
-      break;
-    else
-      echo "Incorrect Input: Select a number 1-$#"
-    fi
-  done
-  retval=$REPLY  
-}
-
-
 read_automator_config() {  
   result=$(jq '.' /home/user/log/metadata_log.json)
   SUBDOMAIN=$(jq -r '."subdomain"' <<< "${result}")
@@ -38,7 +16,7 @@ read_automator_config() {
   DB_ADMIN="DBADMIN"
   DB_ADMIN_PASSWORD="$( echo "$result" | jq -r '.createdServiceInstances[] | select(.name == "hana-cloud") | .parameters.data.systempassword' 2> /dev/null)"
   
-  DB_DASHBOARD="$( echo "$result" | jq -r '.createdServiceInstances[] | select(.name == "hana-cloud") | .statusResponse | ."dashboard url" ' 2> /dev/null)"  
+  DB_DASHBOARD="$( echo "$result" | jq -r '.createdServiceInstances[] | select(.name == "hana-cloud") | .statusResponse | .dashboard ' 2> /dev/null)"  
   DB_HOST="${DB_DASHBOARD#*?host=}"
   DB_HOST=${DB_HOST/&component*}
   DB_PORT=${DB_DASHBOARD/*port=/}
@@ -51,29 +29,10 @@ echo "##########################################################################
 echo ""
 read_automator_config
 
-# log "Choose Deployment option, Variant 1 will deploy the application ready for the Mission. Variant 2 contains all the enhancements which will be introduced throughout the mission:"
-# declare -a arr="(Mission-Start Mission-End)"    # must be quoted like this
-#createmenu "${arr[@]}"
-#VARIANT_NUMBER="$retval"
-
-#case $VARIANT_NUMBER in
-#  1)	
-#    BTPSA_KYMA_IMAGE_TAG="main"
-#  ;;&    
-#  2)
-#    BTPSA_KYMA_IMAGE_TAG="final"
-#    log "Checkout final branch"
-#    cd /home/user/tutorial || exit
-#    git checkout final
-#  ;;          
-#esac
-
 # Summary Step 1
 echo
 log "Deployment will be performed with the following attributes:"
 echo ""
-log "Selected Deployment Variant: $BTPSA_KYMA_IMAGE_TAG"
-echo
 log "BTP Environment"
 log "Provider Subdomain: " "$SUBDOMAIN"
 log "Kyma Cluster Domain: " "$CLUSTER_DOMAIN"
@@ -113,60 +72,35 @@ echo
 
 PROJECT=approuter
 log "Step 2.5 - Deploy $PROJECT"
-FULL_NAME=$BTPSA_KYMA_IMAGE_NAME_APPROUTER:$BTPSA_KYMA_IMAGE_TAG
-cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$FULL_NAME~g" | sed "s~<provider-subdomain>~$SUBDOMAIN~g" | sed "s~<cluster-domain>~$CLUSTER_DOMAIN~g" | kubectl apply -f -
+cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_APPROUTER~g" | sed "s~<provider-subdomain>~$SUBDOMAIN~g" | sed "s~<cluster-domain>~$CLUSTER_DOMAIN~g" | kubectl apply -f -
 
 PROJECT=db-service
-FULL_NAME=$BTPSA_KYMA_IMAGE_NAME_DB_SERVICE:$BTPSA_KYMA_IMAGE_TAG
 log "Step 2.6 - Deploy $PROJECT"
-cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$FULL_NAME~g" | kubectl apply -f -
+cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_DB_SERVICE~g" | kubectl apply -f -
 
 PROJECT=bp-service
-FULL_NAME=$BTPSA_KYMA_IMAGE_NAME_BP_SERVICE:$BTPSA_KYMA_IMAGE_TAG
 log "Step 2.7 - Deploy $PROJECT"
-cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$FULL_NAME~g" | kubectl apply -f -
+cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_BP_SERVICE~g" | kubectl apply -f -
 
 PROJECT=ef-service
-FULL_NAME=$BTPSA_KYMA_IMAGE_NAME_EF_SERVICE:$BTPSA_KYMA_IMAGE_TAG
 log "Step 2.8 - Deploy $PROJECT"
-cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$FULL_NAME~g" | kubectl apply -f -
+cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_EF_SERVICE~g" | kubectl apply -f -
 
 PROJECT=broker
-FULL_NAME=$BTPSA_KYMA_IMAGE_NAME_BROKER:$BTPSA_KYMA_IMAGE_TAG
 log "Step 2.9 - Deploy $PROJECT"
-cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$FULL_NAME~g" | kubectl apply -f -
+cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_BROKER~g" | kubectl apply -f -
 
 PROJECT=email-service
-FULL_NAME=$BTPSA_KYMA_IMAGE_NAME_EMAIL_SERVICE:$BTPSA_KYMA_IMAGE_TAG
 log "Step 2.10 - Deploy $PROJECT"
-cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$FULL_NAME~g" | kubectl apply -f -
+cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_EMAIL_SERVICE~g" | kubectl apply -f -
 
 PROJECT=ui
-FULL_NAME=$BTPSA_KYMA_IMAGE_NAME_UI:$BTPSA_KYMA_IMAGE_TAG
 log "Step 2.11 - Deploy $PROJECT"
-cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$FULL_NAME~g" | kubectl apply -f -
+cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_UI~g" | kubectl apply -f -
 
 PROJECT=business-partner-mock
-FULL_NAME=$BTPSA_KYMA_IMAGE_NAME_BUSINESS_PARTNER_MOCK:$BTPSA_KYMA_IMAGE_TAG
 log "Step 2.12 - Deploy $PROJECT"
-cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$FULL_NAME~g" | kubectl apply -f -
-
-
-if [ "$BTPSA_KYMA_IMAGE_TAG" = "final" ]; then
-  kubectl create namespace day2-operations || true
-  
-  PROJECT=day2-approuter
-  log "Step 2.13 - Deploy $PROJECT"
-  helm upgrade "$PROJECT" "/home/user/tutorial/code/day2-operations/deployment/helmCharts/day2-approuter-chart" --install --namespace "day2-operations" --set clusterdomain="$CLUSTER_DOMAIN" --set image.repository="$BTPSA_KYMA_IMAGE_NAME_DAY2_APPROUTER" --set image.tag="$BTPSA_KYMA_IMAGE_TAG" --wait --timeout 90s --atomic
-
-  PROJECT=day2-ui
-  log "Step 2.14 - Deploy $PROJECT"
-  helm upgrade "$PROJECT" "/home/user/tutorial/code/day2-operations/deployment/helmCharts/day2-ui-chart" --install --namespace "day2-operations" --set image.repository="$BTPSA_KYMA_IMAGE_NAME_DAY2_UI" --set image.tag="$BTPSA_KYMA_IMAGE_TAG" --wait --timeout 90s --atomic
-
-  PROJECT=day2-service
-  log "Step 2.15 - Deploy $PROJECT"
-  helm upgrade "$PROJECT" "/home/user/tutorial/code/day2-operations/deployment/helmCharts/day2-service-chart" --install --namespace "day2-operations" --set db.sqlendpoint="$DB_SQLENDPOINT" --set db.admin="$DB_ADMIN" --set db.password="$DB_ADMIN_PASSWORD" --set image.repository="$BTPSA_KYMA_IMAGE_NAME_DAY2_SERVICE" --set image.tag="$BTPSA_KYMA_IMAGE_TAG" --wait --timeout 90s --atomic  
- fi
+cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$BTPSA_KYMA_IMAGE_NAME_BUSINESS_PARTNER_MOCK~g" | kubectl apply -f -
 
 echo
 log "####################################################################################################"
