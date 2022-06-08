@@ -1,32 +1,32 @@
-# Exporting application logs to external logging tools
+# Export Application Logs to External Logging Tools
 
 ## Introduction
-By default a fluentbit instance has been configured in **kyma-system** namespace.  It then forwards the logs to a Loki instance inside **kyma-system**. To access the Loki instance you can check [Exposing built-in Grafana securely with Identity Authentication(IAS)](/documentation/observe/expose-grafana-with-ias/README.md).   However, the fluentbit instance in **kyma-system** cannot be extended to forward logs to external tooling.  This tutorial describes how to install a custom log collector in custom namespace, then export the logs to an external logging tools such as ELK stack (Elasticsearch and Kibana).
+By default, a Fluent Bit instance has been configured in the **kyma-system** namespace. Then, it forwards the logs to a Loki instance inside the **kyma-system** namespace. To access the Loki instance, see [Exposing built-in Grafana securely with Identity Authentication(IAS)](/documentation/observe/expose-grafana-with-ias/README.md). However, the Fluent Bit instance in the **kyma-system** namespace cannot be extended to forward logs to external tooling. This tutorial describes how to install a custom log collector in a custom namespace, then export the logs to an external logging tools such as an ELK stack (Elasticsearch and Kibana).
 
-Below diagram shows the target setup of our scenario.  
+The diagram below shows the target setup of our scenario.  
 
-1. A second fluentbit instance is installed in custom namespace. It extracts all logs avaiable in Kyma cluster, including logs from Easy Franchise App.
+1. A second Fluent Bit instance is installed in a custom namespace. It extracts all logs avaiable in the Kyma cluster, including logs from the Easy Franchise Application.
 
-1. Additionally the logs from Kyma components are collected as well.  It is also possible to exclude the kyma-system namespace from log collection.
+1. Additionally, the logs from the Kyma components are collected as well. It is also possible to exclude the **kyma-system** namespace from the log collection.
 
-1. The fluentbit is configured to forward all logs to an ELK stack. 
+1. The Fluent Bit instance is configured to forward all logs to an ELK stack. 
 
-1. An ELK stack is installed in a separate Kyma cluster, serving as an external log viewing tool.   If a separate cluster is not available, you could also use the same cluster as EasyFranchise app. The concept would be rather similar. 
+1. An ELK stack is installed in a separate Kyma cluster, serving as an external log viewing tool. If a separate cluster is not available, you could also use the same cluster as  the Easy Franchise application. The concept would be rather similar. 
 
-1. A day2 operator would accesss the logging tool via browser. 
+1. A Day2 operator would accesss the logging tool via browser. 
 
 ![](images/custom_fluentbit.png)
 
 
-## Install ELK stack in Kyma cluster
+## Install ELK Stack in a Kyma Cluster
 
-In this step we use ELK stack as an example for external logging tooling.   You can certainly choose any other tools as long as the protocol is supported by log collector. 
+In this step we use an ELK stack as an example for external logging tooling. You can certainly choose any other tools as long as the protocol is supported by the log collector. 
 
-The default configurations will install ELK stack in the same Kyma cluster where EasyFranchise app is deployed. This is to accommodate situation where only one Kyma cluster is available (e.g. in case of using BTP trial account).  If you do have second Kyma cluster, you can opt to install ELK stack in a seperate cluster. The setup is very similar.
+The default configurations will install the ELK stack in the same Kyma cluster where the Easy Franchise application is deployed. This is to accommodate the situation where only one Kyma cluster is available (for example, in case of using SAP BTP free tier).  If you do have a second Kyma cluster, you can opt to install the ELK stack in a seperate cluster. The setup is very similar.
 
-We are using official [Elastic Cloud on Kubernetes](https://www.elastic.co/guide/en/cloud-on-k8s/current/index.html) provided by Elastic.  It is essentially a set of Kubernetes operators orchestrating lifecycle of Elastic search, Kibana and a few other Elastic resources.  In our example we only need to deploy Elasticsearch and Kibana CRD (customer resource definition).
+We are using the official [Elastic Cloud on Kubernetes](https://www.elastic.co/guide/en/cloud-on-k8s/current/index.html) provided by Elastic. It is essentially a set of Kubernetes operators orchestrating lifecycle of Elasticsearch, Kibana and a few other Elastic resources. In our example, we only need to deploy Elasticsearch and Kibana customer resource definition.
 
-> Note: In above diagram the ELK stack is depicted as "External Custom Logging Stack" in a second Kyma cluster to better illustrate the flexibility of the scenario. You can certainly deploy ELK in the same Kyma cluster where your EasyFranchise app is running.
+> Note: In the diagram above, the ELK stack is depicted as "External Custom Logging Stack" in a second Kyma cluster to illustrate better the flexibility of the scenario. You can certainly deploy ELK in the same Kyma cluster where your Easy Franchise application is running.
 
 ```shell
 # Install Elastic CRD and the operator with its RBAC Rules  https://www.elastic.co/guide/en/cloud-on-k8s/1.9/k8s-deploy-eck.html
@@ -37,7 +37,7 @@ kubectl apply -f https://download.elastic.co/downloads/eck/1.9.1/operator.yaml
 
 ```
 
-Then deploy a new instance for Elasticsearch and Kibana respectively. 
+Then, deploy a new instance of Elasticsearch and Kibana respectively. 
 
 
 ```shell
@@ -60,7 +60,7 @@ kubectl apply -f kibana-expose.yaml
 
 ```
 
-Once above resources are deployed, you can check the status of the deployment with following command:
+Once the resources above are deployed, you can check the status of the deployment with the following command:
 
 ```shell
 $ kubectl get elastic
@@ -73,7 +73,7 @@ kibana.kibana.k8s.elastic.co/ef-kibana   green    1       7.15.0    38m
 
 ```
 
-In addition, you can also access Kibana and Elasticsearch in your browser. To find out the URL please run following commands:
+In addition, you can also access Kibana and Elasticsearch in your browser. To find out the URL, run following commands:
 
 ```shell
 
@@ -85,7 +85,7 @@ kibana-expose-s855g    ["kyma-gateway.kyma-system.svc.cluster.local"]   ["kibana
 
 ```
 
-For login you can use  "elastic" as username, and password can be extracted in your cluster with following command:
+When logging in, you can use  "elastic" as username, and get the password in your cluster with following command:
 
 ```shell
 
@@ -93,29 +93,29 @@ kubectl get secret ef-elasticsearch-es-elastic-user -o go-template='{{.data.elas
 
 ```
 
-The **login credentials**  will also be needed for configuring fluentbit instance in next step.
+The **login credentials**  will also be needed for configuring the Fluent Bit instance in the next step.
 
-## Install log collector fluentbit
+## Install Log Collector Fluent Bit
 
-Next we will install log collector fluentbit in a custom namespace.  The fluentbit collects logs on all nodes in Kyma cluster and forwards to Elasticsearch which is deployed in previous chapter. Please open file [fluentbit.yaml](/code/day2-operations/deployment/k8s/fluentbit.yaml), and replace following parameter with your own value:
+We will install the log collector Fluent Bit in a custom namespace.  Fluent Bit collects logs on all nodes in the Kyma cluster and forwards to Elasticsearch which is deployed in the previous step. Open the file [fluentbit.yaml](/code/day2-operations/deployment/k8s/fluentbit.yaml), and replace the following parameter with your own value:
 
-- Adapt the value for "FLUENT_ELASTICSEARCH_HOST" with your elasticsearch URL which retrieved from previous step, e.g."elasticsearch.<your Kyma cluster domain>.kyma.ondemand.com"
+- Adapt the value for "FLUENT_ELASTICSEARCH_HOST" with your Elasticsearch URL which was retrieved in the previous step, for example "elasticsearch.<your Kyma cluster domain>.kyma.ondemand.com"
 
 ![](images/fluent_elasticsearch_host.png)
 
-- Fluentbit requires username and password in order to forward logs to Elasticsearch.  We are using envrionment variables `ELASTIC_USER` (default to "elastic") and `ELASTIC_PASS` to pass the value.  If Elasticsearch is deployed in the same cluster as your workload, the password for Elasticsearch has been created automatically and saved in secret `ef-elasticsearch-es-elastic-user` , and you can skip this step.  However, if Elasticsearch is deployed in a different cluster (referred as **ELK cluster**), please extract Elasticsearch password from ELK cluster, then create a secret as following in the EasyFranchise app cluster:
+- Fluent Bit requires username and password in order to forward logs to Elasticsearch.  We are using envrionment variables `ELASTIC_USER` (default to "elastic") and `ELASTIC_PASS` to pass the value.  If Elasticsearch is deployed in the same cluster as your workload, the password for Elasticsearch has been created automatically and saved in the `ef-elasticsearch-es-elastic-user` secret, and you can skip this step.  However, if Elasticsearch is deployed in a different cluster (referred as **ELK cluster**), extract the Elasticsearch password from the ELK cluster, then create a secret in the Easy Franchise application cluster as shown below:
 
 ```shell
-# Make sure you are in ELK cluster, and extract the password of Elasticsearch
+# Make sure you are in the ELK cluster, and extract the password of Elasticsearch.
 
 kubectl get secret ef-elasticsearch-es-elastic-user -o go-template='{{.data.elastic | base64decode}}'
 
-# Now switch to EasyFranchise cluster, and create a secret using above extract value.
+# Now switch to Easy Franchise cluster, and create a secret using the extracted value above.
 kubectl create secret generic ef-elasticsearch-es-elastic-user --from-literal=elastic=<output from previous command>
 
 ```
 
-Then deploy the **fluentbit.yaml** in your Kyma cluster. 
+Then, deploy the **fluentbit.yaml** in your Kyma cluster. 
 
 > Note: Please deploy fluentbit in the Kyma cluster where your workload (e.g. EasyFranchise app) is running.
 
@@ -125,31 +125,30 @@ kubectl deploy -f fluentbit.yaml
 
 ```
 
-## Verify Logs in Kibana
+## Check the Logs in Kibana
 
-To verify if the logs have been properly pushed into Elastic search, you can try following URL in your browser: ```https://elasticsearch.<your Kyma cluster>.kyma.ondemand.com/_cat/indices```
+To check if the logs have been properly pushed into Elasticsearch, you can try the following URL in your browser: ```https://elasticsearch.<your Kyma cluster>.kyma.ondemand.com/_cat/indices```
 
 ![](images/elasticsearch_indices.png)
 
-You should see an incies with prefix "fluentbit". 
+You should see an index with prefix "fluentbit". 
 
-
-In your Kibana, go to "Index Management" (```https://kibana.<your Kyma cluster>.kyma.ondemand.com/app/management/data/index_management/indices```), you should also see the fluentbit indices.
+1. In your Kibana, go to "Index Management" (```https://kibana.<your Kyma cluster>.kyma.ondemand.com/app/management/data/index_management/indices```), you should also see the fluentbit indices.
 
 ![](images/elasticsearch_indices2.png)
 
-Then go to "Index Pattern" (```https://kibana.<your Kyma cluster>.kyma.ondemand.com/app/management/kibana/indexPatterns```) to create a new index pattern.
+2. Go to "Index Pattern" (```https://kibana.<your Kyma cluster>.kyma.ondemand.com/app/management/kibana/indexPatterns```) to create a new index pattern.
 
 ![](images/index_pattern.png)
 
-Then go to "Analytics --> Discover" to see the logs
+3. Go to "Analytics --> Discover" to see the logs.
 
 ![](images/discover_logs.png)
 
 
 ## Troubleshooting
 
-- Check PVC usage of Elasticsearch
+- Check the PVC usage of Elasticsearch
 
   * Option 1: command line
 
@@ -157,14 +156,14 @@ Then go to "Analytics --> Discover" to see the logs
 
     kubectl -n <namespace> exec <pod-name> df
 
-    # e.g.
+    # for example
     kubectl exec -it ef-elasticsearch-es-default-2 df
 
     ```
   
   * Option 2: Prometheus metrics dashboard
     
-    Open the build-in Grafana dashboard, navigate to Dashboard --> Manage, then search and select dashboard **Persistent Volumes**.
+    Open the build-in Grafana dashboard, navigate to Dashboard > Manage, then search and select the **Persistent Volumes** dashboard.
 
     ![](images/troubleshooting_kubelet_pvc_metrics_navigate.png)
 
@@ -172,13 +171,13 @@ Then go to "Analytics --> Discover" to see the logs
     ![](images/troubleshooting_kubelet_pvc_metrics.png)
 
 
-- To clean up the Elasticsearch index, you can deploy curator as below
+- To clean up the Elasticsearch index, you can deploy a curator as shown below:
 
   ```shell
     kubectl apply -f curator.yaml
   ```
 
-  You can check the cronjob schedule with following command
+  You can check the cronjob schedule with following command:
 
   ```shell
     kubectl get cronjob

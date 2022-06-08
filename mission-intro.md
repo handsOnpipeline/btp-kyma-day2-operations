@@ -23,7 +23,7 @@ The tutorial focus on the following aspects:
 
 ## Requirements
 
-You can find all requirements to execute the tutorial in this [section](/documentation/discover/prerequisites/README.md).
+You can find all requirements to execute the tutorial in this [section](./documentation/discover/prerequisites/README.md).
 
 ## Known Issues
 
@@ -31,7 +31,7 @@ The tutorial is provided on the "as-is" basis. Currently, there are no known iss
 
 ## How to Obtain Support?
 
-First check if you find an answer in the [troubleshooting](/documentation/troubleshooting/README.md) section.
+First check if you find an answer in the [troubleshooting](./documentation/troubleshooting/README.md) section.
 
 Create an issue to get support or to report a bug in [GitHub](https://github.com/SAP-samples/btp-kyma-multitenant-extension/issues/new/choose) or interact with us via the SAP Discovery Center questions channel of the mission.
 
@@ -41,7 +41,7 @@ Have you found the enablement material easy to understand? Are you missing somet
 
 ## What's New
 
-Check the details of our last [releases](/documentation/discover/whats-new/README.md).
+Check the details of our last [releases](./documentation/discover/whats-new/README.md).
 
 ## License
 

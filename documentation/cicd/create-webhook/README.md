@@ -49,8 +49,16 @@ Now that we have created the jobs for both of our UI's we can trigger the build 
 
 ## Do a test Commit to Trigger the Build
 
-In order to test the webhook you can perform a change (TODO Matt, irgendeine kleine Änderung im UI...)
+In order to test the webhook you can perform a change in the Easy franchise application. Let test it by changing something in the Easy Franchise UI.
 
-Once you have pushed the change to the repository both of the jobs are triggered automatically. After the job is finished open the ui and check if your changes are active.
+1. Open the file [UserProfile.vue](../../../code/easyfranchise/source/ui/src/components/UserProfile.vue).
+
+1. Change the header H1 from **User Profile** to **User Details**.
+   ```
+   <h1 class="mt-5 mb-5 text-center">User Details</h1>
+   ```
+1. Save the file and push the changes to the repository.
+
+As soon as the changes are pushed, both jobs are triggered automatically. After the job is finished open the application UI and check if your changes are active.
 
 Note: As we have only changed one of the ui's it would be unnecessary to trigger both of the jobs. But as we use one and the same repository for each build job we cannot prevent that.

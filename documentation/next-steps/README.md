@@ -1,3 +1,3 @@
 # Next Steps
 
-* [Complete the Mission](/documentation/next-steps/complete-mission/README.md)
+* [Complete the Mission](./complete-mission/README.md)

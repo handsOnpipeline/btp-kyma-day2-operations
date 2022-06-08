@@ -27,7 +27,7 @@ This setup steps are for completely new users. If you already have an account so
 
 ## Usage
 
-Start a shell and go to the [setup folder](/code/setup).
+Start a shell and go to the [setup folder](../../../code/setup/).
 
 Please make sure that you have installed btp and cf client and that both applications can be found. The script will check that the clients are available.
 

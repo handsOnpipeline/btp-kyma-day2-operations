@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Component
-public class C3P0ConnectionPoolMetricsScheduler {
+public class C3P0ConnectionPoolMetricsScheduler { // We are using c3p0 database wrapper in EasyFranchise app. For more details refer to https://www.mchange.com/projects/c3p0/
 
   private static final Logger logger = LoggerFactory.getLogger(C3P0ConnectionPoolMetricsScheduler.class);
 

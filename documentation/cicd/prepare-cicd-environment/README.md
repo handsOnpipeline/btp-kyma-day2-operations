@@ -43,7 +43,7 @@ We need to create a **Role Binding**, so that you are able to access the Service
    * Service Account Name: **cicd-frontend** (or the name you choose for your Service Account) 
    * Click on **create**
   
-   ![](./images/05-CICD-13.png)  <!--//TODO do you have a newer picutre with fitting names*)-->
+   ![](./images/05-CICD-13.png)
 
 
 ## Download the Kubeconfig of the Service Account

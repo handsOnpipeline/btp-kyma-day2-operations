@@ -1,5 +1,11 @@
-# Share Feedback
+# Give Feedback
 
-TODO:
-- Create issue templates
-- Link issue links here
+Have you found the enablement material easy to understand? Are you missing something? What can we improve? 
+
+You can do it via different channels:
+* [Create a Github issue](https://github.com/SAP-samples/btp-kyma-day2-operations/issues/new/choose)
+* [Fill our mission survey](TODO/url-to-be-created) tp provide general feedback about the mission.
+* Fill the final survey by completing the mission and provide feedback about the tool and the mission.
+* Use the Coach section in the SAP Discovery Center to interact with us about a concrete section of the mission.
+
+Thanks in advance!

@@ -30,8 +30,8 @@
     - [Deploy Easy Franchise UI with KubeCtl](../../documentation/deploy/deploy-with-helm-charts/README.md)
     - [Deploy Day2 UI with HELM](../../documentation/deploy/deploy-with-helm-charts/README.md)
 - COMPLETE 
-    - [Complete the Mission](next-steps/complete-mission/README.md)
-    - [Share your Feedback](next-steps/share-feedback/README.md)
-    - [Explore our Related Missions](next-steps/explore-related-missions/README.md)
+    - [Complete the Mission](../../documentation/next-steps/complete-mission/README.md)
+    - [Share your Feedback](../../documentation/next-steps/share-feedback/README.md)
+    - [Explore our Related Missions](../../documentation/next-steps/explore-related-missions/README.md)
 
 <!-- disco-toc-end -->
