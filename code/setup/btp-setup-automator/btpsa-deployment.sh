@@ -51,22 +51,22 @@ echo "##########################################################################
 echo ""
 read_automator_config
 
-# log "Choose Deployment option, Variant 1 will deploy the application ready for the Mission. Variant 2 contains all the enhancements which will be introduced throughout the mission:"
-# declare -a arr="(Mission-Start Mission-End)"    # must be quoted like this
-#createmenu "${arr[@]}"
-#VARIANT_NUMBER="$retval"
+log "Choose Deployment option, Variant 1 will deploy the application ready for the Mission. Variant 2 contains all the enhancements which will be introduced throughout the mission:"
+declare -a arr="(Mission-Start Mission-End)"    # must be quoted like this
+createmenu "${arr[@]}"
+VARIANT_NUMBER="$retval"
 
-#case $VARIANT_NUMBER in
-#  1)	
-#    BTPSA_KYMA_IMAGE_TAG="main"
-#  ;;&    
-#  2)
-#    BTPSA_KYMA_IMAGE_TAG="final"
-#    log "Checkout final branch"
-#    cd /home/user/tutorial || exit
-#    git checkout final
-#  ;;          
-#esac
+case $VARIANT_NUMBER in
+  1)	
+    BTPSA_KYMA_IMAGE_TAG="main"
+  ;;&    
+  2)
+    BTPSA_KYMA_IMAGE_TAG="final"
+    log "Checkout final branch"
+    cd /home/user/tutorial || exit
+    git checkout final
+  ;;          
+esac
 
 # Summary Step 1
 echo
