@@ -8,5 +8,6 @@ data:
     db.service: http://db-service.integration/easyfranchise/rest/dbservice/v1/
     db.admin.service: http://db-service.integration/easyfranchise/rest/dbadminservice/v1/
     email.service: http://email-service.integration:3002/easyfranchise/rest/emailservice/v1/
+    day2.service: http://day2-service.day2-operations:8091/
     scheduler.auto.start: off
     s4hana.destination: EasyFranchise-S4HANA 

@@ -101,15 +101,14 @@ metadata:
 data:
   cluster-domain: {{ .Values.clusterdomain }}  ## adapt to your Kyma cluster
 ---
-apiVersion: services.cloud.sap.com/v1
+apiVersion: servicecatalog.k8s.io/v1beta1
 kind: ServiceInstance
 metadata:
   name: xsuaa-service
   namespace: day2-operations
 spec:
-  serviceOfferingName: xsuaa
-  servicePlanName: broker # https://jam4.sapjam.com/blogs/show/2dxT4cVGxTXZRJT0D1DQQM
-  externalName: xsuaa-service-external  
+  clusterServiceClassExternalName: xsuaa
+  clusterServicePlanExternalName: broker # https://jam4.sapjam.com/blogs/show/2dxT4cVGxTXZRJT0D1DQQM
   parameters:
     xsappname: day2-operations
     tenant-mode: dedicated # use "shared" for multi-tenant application
@@ -130,13 +129,12 @@ spec:
       - http://localhost:5000/login/callback
       token-validity:  900
 ---
-apiVersion: services.cloud.sap.com/v1
+apiVersion: servicecatalog.k8s.io/v1beta1
 kind: ServiceBinding
 metadata:
   name: xsuaa-service-binding
   namespace: day2-operations
 spec:
-  serviceInstanceName: xsuaa-service
-  externalName: xsuaa-service-external
-  secretName: xsuaa-service-binding
+  instanceRef:
+    name: xsuaa-service
 ---
