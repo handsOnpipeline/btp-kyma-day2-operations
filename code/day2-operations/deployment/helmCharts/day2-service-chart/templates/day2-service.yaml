@@ -15,7 +15,7 @@ spec:
       creationTimestamp: null
       labels:
         app: day2-service
-        sidecar.istio.io/inject: "false" # disable istio injection, otherwise facing "connection reset by peer" error
+        sidecar.istio.io/inject: "false" # disable istio injection, otherwise facing "connection reset by peer" error, when in use with Dynatrace in the Observability context
     spec:
       imagePullSecrets:
         - name: registry-secret

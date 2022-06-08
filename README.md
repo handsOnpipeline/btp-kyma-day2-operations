@@ -1,41 +1,66 @@
-# SAP-samples/repository-template
-This default template for SAP Samples repositories includes files for README, LICENSE, and .reuse/dep5. All repositories on github.com/SAP-samples will be created based on this template.
-
-# Containing Files
-
-1. The LICENSE file:
-In most cases, the license for SAP sample projects is `Apache 2.0`.
-
-2. The .reuse/dep5 file: 
-The [Reuse Tool](https://reuse.software/) must be used for your samples project. You can find the .reuse/dep5 in the project initial. Please replace the parts inside the single angle quotation marks < > by the specific information for your repository.
-
-3. The README.md file (this file):
-Please edit this file as it is the primary description file for your project. You can find some placeholder titles for sections below.
-
-# [Title]
-<!-- Please include descriptive title -->
-
-<!--- Register repository https://api.reuse.software/register, then add REUSE badge:
-[![REUSE status](https://api.reuse.software/badge/github.com/SAP-samples/REPO-NAME)](https://api.reuse.software/info/github.com/SAP-samples/REPO-NAME)
+# Easy Franchise: Extend a Kyma-Based Multitenant Application with Day 2 Operations
+<!--
+TODO: update the url of the Discovery mission once it's created.   
+TODO: generate and add the reuse license
 -->
+> Important information: The content of this GitHub repository has been created as a source for the [Enrich a Kyma based multitenant application with new identity features](https://discovery-center.cloud.sap/missiondetail/url-to-be-updated) mission at SAP Discovery Center. So, we recommend you use directly the mission in the SAP Discovery Center for a better experience.
 
 ## Description
-<!-- Please include SEO-friendly description -->
+This mission explains how to extend a Kyma-based multitenant application with day 2 operations topics like continuous integration and delivery, observability and metering.
+
+It is related to the [Develop a Multitenant Extension Application in SAP BTP, Kyma Runtime](https://discovery-center.cloud.sap/missiondetail/3683/3726/) mission.
+<!--
+todo reface below chapter 
+-->
+
+As a result, in this mission everything will be based on the multitenant application called Easy Franchise, which is a multitenant application running on SAP BTP, Kyma environment and extending SAP S/4HANA Cloud. We highly recommend that you have a look at the above mentioned mission where you can find all the necessary details. Be aware that we will not spend so much time here explaining the application. We will rather focus on enriching it with new features.
+
+For the sake of simplicity, our team has taken some compromise compared to a real application. So, this application doesn't aim to be used productively.
+<!--
+TODO: we should have here the new target solution diagramm with the day 2 services!
+-->
+Here is an overview diagram of the Easy Franchise application:
+![](https://raw.githubusercontent.com/SAP-samples/btp-kyma-multitenant-extension/main/documentation/images/easyfranchise-diagrams/Slide4.jpeg)
+
+The repository has been structured in 2 sections:
+* [documentation](/documentation/README.md): Contains the content of the mission, explaining in details how to enrich the existing Easy Franchise application.
+* [code](/code/README.md): Contains the code and the deployment files of the multitenant application Easy Franchise and the Metering Dashboard Application. In addition, the [setup](https://github.tools.sap/saas-extension-on-kyma/easyfranchise-day2/tree/main/code/setup) folder contains a script to set up the required SAP BTP environment and another script to deploy the Easy Franchise application automatically.
+
+
+## Who Is This Mission For?
+
+The business scenario of this mission has been created with the SAP partner as focus persona. This is, of course, not exclusively relevant for SAP partners and can be useful for every person (developer, operator, architect) looking for details on how to enrich a multitenant application running on Kyma with day 2 operations topics like continuous integration and delivery, observability and metering.
+As mentioned before, we highly recommend to start with the [Develop a Multitenant Extension Application in SAP BTP, Kyma Runtime](https://discovery-center.cloud.sap/missiondetail/3683/3726/) mission as we are expecting some prior knowledge (for example, Kyma, and SAP BTP) to run this mission. As we are concentrating on advanced topics, this mission is mainly suitable for experienced developers on SAP Business Technology Platform (SAP BTP). 
+
+## Focus Topics of the Mission
+
+The mission focuses on the following aspects:
+- Observability (logging, monitoring and alerting)
+- Metering
+- Continuous integration and delivery deployment
 
 ## Requirements
 
-## Download and Installation
+You can find all requirements to execute the mission in this [Prerequisites](/documentation/discover/prerequisites/README.md) section.
 
 ## Known Issues
-<!-- You may simply state "No known issues. -->
 
-## How to obtain support
-[Create an issue](https://github.com/SAP-samples/<repository-name>/issues) in this repository if you find a bug or have questions about the content.
- 
-For additional support, [ask a question in SAP Community](https://answers.sap.com/questions/ask.html).
+The mission is provided on the "as-is" basis. Currently, there are no known issues for the project.
 
-## Contributing
-If you wish to contribute code, offer fixes or improvements, please send a pull request. Due to legal reasons, contributors will be asked to accept a DCO when they create the first pull request to this project. This happens in an automated fashion during the submission process. SAP uses [the standard DCO text of the Linux Foundation](https://developercertificate.org/).
+## How to Get Support?
+
+Check if you find an answer in the [Troubleshooting](/documentation/troubleshooting/README.md) section.
+
+Create an issue to get support, report a bug at the [Issues](https://github.com/SAP-samples/btp-kyma-multitenant-extension/issues/new/choose) section or interact with us via the SAP Discovery Center, in the *Conversations* section of the Project Board of the mission..
+
+## How to Provide Feedback?
+
+Have you found the enablement material easy to understand? Are you missing something? What can we improve? [Share your feedback](https://github.com/SAP-samples/btp-kyma-multitenant-extension/issues/new/choose), so that we can improve the documentation and provide a better material for future stakeholders.
+
+## What's New
+
+Check the details of our last [releases](/documentation/discover/whats-new/README.md).
 
 ## License
-Copyright (c) 2022 SAP SE or an SAP affiliate company. All rights reserved. This project is licensed under the Apache Software License, version 2.0 except as noted otherwise in the [LICENSE](LICENSE) file.
+
+Copyright (c) 2022 SAP SE or an SAP affiliate company. All rights reserved. This project is licensed under the Apache Software License, version 2.0 except as noted otherwise in the (TODO update licence licences link) file.
