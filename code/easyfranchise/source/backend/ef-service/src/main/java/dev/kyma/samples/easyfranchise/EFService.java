@@ -1,7 +1,5 @@
 package dev.kyma.samples.easyfranchise;
 
-import java.io.StringReader;
-import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -20,12 +18,8 @@ import dev.kyma.samples.easyfranchise.dbentities.Coordinator;
 import dev.kyma.samples.easyfranchise.dbentities.Mentor;
 import dev.kyma.samples.easyfranchise.uientities.MentorNotification;
 import dev.kyma.samples.easyfranchise.uientities.UIFranchise;
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
 import dev.kyma.samples.easyfranchise.uientities.NotificationConfig;
 import jakarta.json.bind.Jsonb;
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -42,7 +36,6 @@ import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
-
 
 /**
  * Rest service for EasyFranchise operations. For tenant specific calls, the
@@ -118,7 +111,7 @@ public class EFService extends BaseRS {
     public Response getFranchisees(@Context UriInfo uri, @Context HttpHeaders headers, @Context ContainerRequestContext resContext) {
         logger.info(Util.createLogDetails(resContext, headers));
         
-        //extract authorization header from AppRouter
+        //extract authorization header from Approuter
         String authorizationHeader;
         if (headers != null && headers.getHeaderString(HttpHeaders.AUTHORIZATION) != null){
             authorizationHeader = headers.getHeaderString(HttpHeaders.AUTHORIZATION).replace("Bearer","");
@@ -613,109 +606,6 @@ public class EFService extends BaseRS {
             return createErrorResponse();
         }
     }
-    
-    @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("meter-user-login")
-    public Response meterUserLogin(@Context HttpHeaders headers, @Context ContainerRequestContext resContext) {
-        logger.info(Util.createLogDetails(resContext, headers));
-        try {
-            var tenantId = Util.validateTenantAccess(headers);
-            var user = getUser(resContext, headers);
-            
-            ConnectionParameter param = new ConnectionParameter(RequestMethod.PUT,
-                    Util.getMeteringOperationServiceUrl() + "user/login").setAcceptJsonHeader();
-            param.payload = "{\"tenantid\": \"" + tenantId + "\", \"user\": \"" + user + "\"}";
-            Connection.call(param);
-            if (param.status != HttpStatus.SC_OK) {
-                throw new WebApplicationException("Error while calling metering operations service.  "+ param.getUrl() + " status:" + param.status,  param.status);
-            }
-            return createOkResponse(param.content);
-        } catch (WebApplicationException e) {
-            logger.error(e.getMessage(), e);
-            return createResponse(e);
-        } catch (Exception e) {
-            logger.error(UNEXPECTED_ERROR + e.getMessage(), e);
-            return createErrorResponse();
-        }
-
-    }
-    
-    /**
-     * Get the user name from the request Context. Return a default name for the
-     * local development
-     * @param httpHeaders 
-     */
-    public static String getUser(HttpHeaders httpHeaders) throws Exception {
-        
-        if (Util.isLocalDev()) { // in the local run, we do not have a logged in user. We are just using a default string
-            return "default-local-user-id";  //TODO make this as property
-        }
-
-         List<String> authorisationHeaders = httpHeaders.getRequestHeader("Authorization");
-         if (authorisationHeaders.size()<1)
-             throw new Exception("missing Header for key \"Authorization\".");
-         
-         // The user in plainext is taken. Consider encrypting if a higher privacy policy is needed.
-         var user = getUserFromBearerToken(authorisationHeaders.get(0));
-         return user; 
-
-    }
-
-     /**
-     * Get the user name from the request Context. Return a default name for the
-     * local development
-     * @param httpHeaders 
-     */
-    public static String getUser(ContainerRequestContext resContext, HttpHeaders httpHeaders) throws Exception {
-        
-        if (Util.isLocalDev()) { // in the local run, we do not have a logged in user. We are just using a default string
-            return "default-local-user-id";
-        }
-
-         List<String> authorisationHeaders = httpHeaders.getRequestHeader("Authorization");
-         if (authorisationHeaders.size()<1)
-             throw new Exception("missing Header for key \"Authorization\".");
-         
-         return getUserFromBearerToken(authorisationHeaders.get(0));
-         
-         
-        /* TODO why can't the user be found in the Prinzipal? Waiting for https://jtrack.wdf.sap.corp/browse/NGPBUG-178719
-        SecurityContext securityContext = resContext.getSecurityContext();
-        if (securityContext == null)
-            throw new Exception("Missing SecurityContext in the ContainerRequestContext");
-
-        Principal principal = securityContext.getUserPrincipal();
-        if (principal == null)
-            throw new Exception("The ContainerRequestContext.getSecurityContext().getUserPrincipal() is null.");
-
-        return principal.getName();
-        */
-    }
-
-    /**
-     * Get the User from the bearerToken
-     * @param bearerToken
-     * @return
-     * @throws Exception
-     */
-    public static String getUserFromBearerToken(String bearerToken) throws Exception {
-        if (bearerToken.indexOf("Bearer") != 0)
-            throw new Exception("The Bearer token of the header dose not not start with `Bearer `");
-        try {
-            String token = bearerToken.substring(7);
-            String[] chunks = token.split("\\.");
-            Base64.Decoder decoder = Base64.getUrlDecoder();
-
-            // String header = new String(decoder.decode(chunks[0]));
-            String payload = new String(decoder.decode(chunks[1]));
-
-            JsonObject jsonObject = Json.createReader(new StringReader(payload)).readObject();
-            return jsonObject.getString("user_name");
-        } catch (Exception e) {
-            throw new Exception("could not read user_name from Bearer token", e);
-        }
-    }  
 
     /**
      * OPTIONS calls for local development.
@@ -778,9 +668,4 @@ public class EFService extends BaseRS {
         return createOkResponseSimpleText("ok");
     }
     
-    @OPTIONS
-    @Path("meter-user-login")
-    public Response setOptions10() {
-        return createOkResponseSimpleText("ok");
-    }  
 }

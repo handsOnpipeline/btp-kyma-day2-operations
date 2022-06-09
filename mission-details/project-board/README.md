@@ -26,9 +26,11 @@
     - [Monitoring Kyma and Custom Workload Metrics with Dynatrace](../../documentation/observe/monitor-custom-metrics-in-dynatrace/README.md)
     - [Monitoring Kyma and Custom Workload Metrics with Custom Prometheus](../../documentation/observe/monitor-custom-metrics-with-prometheus/README.md) 
 - DEPLOY
-    - [Discover the CI/CD Service and the Scenarios](../../documentation/deploy/discover-ci-cd-service/README.md)
-    - [Deploy Easy Franchise UI with KubeCtl](../../documentation/deploy/deploy-with-helm-charts/README.md)
-    - [Deploy Day2 UI with HELM](../../documentation/deploy/deploy-with-helm-charts/README.md)
+    - [Create Git Repository and Kyma Service Accounts](../../documentation/cicd/prepare-cicd-environment/README.md)
+    - [Subscribe to Continuous Integration and Delivery](../../documentation/cicd/subscribe-ci-cd-application/README.md) (optional)
+    - [Create a Job for Easy Franchise UI](../../documentation/cicd/create-easyfranchise-ui-job/README.md)
+    - [Create a Job Day 2 Operations UI](../../documentation/cicd/create-day2-operations-ui-job/README.md)
+    - [Create a Webhook for the Git repository](../../documentation/cicd/create-webhook/README.md)
 - COMPLETE 
     - [Complete the Mission](../../documentation/next-steps/complete-mission/README.md)
     - [Share your Feedback](../../documentation/next-steps/share-feedback/README.md)

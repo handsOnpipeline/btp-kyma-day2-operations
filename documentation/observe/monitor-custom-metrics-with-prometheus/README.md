@@ -1,20 +1,22 @@
 # Monitoring Kyma and Custom Workload Metrics with Custom Prometheus
 
-By default a Prometheus instance has been deployed in **kyma-system** namespace by Prometheus Operator when Kyma is initially provisioned. The built-in Prometheus instance is responsible to scrape metrics of Kyma components in that namespace.  However, due to Kubernetes reconciliation, any changes in **kyma-system** namespace will be reverted to its original state, hence with the built-in Prometheus it is not possible to scrape additional metrics of any custom workload.  
+By default, a Prometheus instance has been deployed in the **kyma-system** namespace by the Prometheus operator when Kyma is initially provisioned. The built-in Prometheus instance is responsible for scraping metrics of Kyma components in that namespace. However, due to Kubernetes reconciliation, any changes in the **kyma-system** namespace will be reverted to its original state, hence with the built-in Prometheus it is not possible to scrape additional metrics of any custom workload.  
 
-In this chapter we will show how to deploy a custom Prometheus instance to scrape custom metrics, while at the same time collects metrics from the build-in Prometheus via /federation endpoint. It will consolidate metrics from different source into one single Prometheus instance. In addition, we will redirect the metrics from custom Prometheus instance to an external tooling, such as [Grafana Cloud Service](https://grafana.com/auth/sign-up/create-user) or a custom Grafana instance in your Kyma cluster.
-
-<!-- TODO Matthieu: why not add Solution Diagram showing all the data flows described above? -->
+In this tutorial, we will show how to deploy a custom Prometheus instance to scrape custom metrics, while at the same time collect metrics from the build-in Prometheus via the /federation endpoint. It will consolidate metrics from different sources into one single Prometheus instance. In addition, we will redirect the metrics from a custom Prometheus instance to an external tooling, such as [Grafana Cloud Service](https://grafana.com/auth/sign-up/create-user) or a custom Grafana instance in your Kyma cluster.
 
 ## Install Custom Prometheus
 
-Among other options, Prometheus could be easily installed using (1) [Prometheus operator kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) or typical (2) [Kubernetes deployment or statefulset](https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus).   However, the Prometheus operator in Kyma cluster, which is installed during cluster provision, will ony watch **kyma-system** namespace for any Prometheus CustomResourceDefinition and ignore any other namespace. This is configured through [Prometheus operator command line flag --namespaces](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/operator.md#operator-cli-flags) as shown below. As a result, we decide to deploy our custom Prometheus using the Kubernetes deployment.
+Among other options, Prometheus could be easily installed using one of the following:
+* [Prometheus operator kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack)
+* [Kubernetes deployment or statefulset](https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus).   
+
+However, the Prometheus operator in the Kyma cluster, which is installed during the cluster provisioning, will ony watch the **kyma-system** namespace for any Prometheus CustomResourceDefinition and ignore any other namespace. This is configured through [Prometheus operator command line flag --namespaces](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/operator.md#operator-cli-flags) as shown below. As a result, we will deploy our custom Prometheus using the Kubernetes deployment.
 
 ```
 kubectl get deployment -n kyma-system monitoring-operator -o yaml
 ```
 
-You will get the below yaml as response:
+You will get the below YAML file as a response:
 
 <pre><code>
 apiVersion: apps/v1
@@ -37,7 +39,7 @@ spec:
 </code></pre>
 
 
-Follow below steps to install custom Prometheus in your Kyma cluster. In our case it will be installed in **default** namespace.
+Follow the following steps to install a custom Prometheus instance in your Kyma cluster. In our case, it will be installed in the **default** namespace.
 
 ```shell
 # add Prmetheus helm chart repo to your local helm repo
@@ -51,7 +53,7 @@ helm search repo -l prometheus-community/prometheus
 helm fetch  prometheus-community/prometheus --untar  --version 15.8.5
 ```
 
-Then we will disable unnecessary components in the charts, and add two jobs to scrape additional metrics. Make a copy of the file **prometheus/values.yaml** and save as **prometheus/prometheus_custom_values.yaml**, and adapt the value according to below example. 
+Then, we will disable the unnecessary components in the charts, and add two jobs to scrape additional metrics. Make a copy of the file **prometheus/values.yaml** and save as **prometheus/prometheus_custom_values.yaml**. Adapt the value according to the following example. 
 
 ```diff
 ## Define serviceAccount names for components. Defaults to component's fully qualified name.
@@ -155,7 +157,7 @@ serverFiles:
 
 ```
 
-Run below command to install Prometheus with your custom value file.
+Run the following command to install Prometheus with your custom value file.
 
 ```shell
 helm install  -f prometheus/prometheus_custom_values.yaml myprometheus prometheus
@@ -170,15 +172,15 @@ kubectl  port-forward svc/myprometheus-server 9091:80
 
 ## Expose Metrics to Prometheus Compliant Tooling
 
-Next we will expose metrics of the custom Prometheus to an external tooling.  In this example two variants are demonstrated:
+We will expose metrics of the custom Prometheus to an external tooling.  In this example two variants are demonstrated:
 
-- Variant 1: In-cluster Grafana: a custom Grafana will be installed in the same Kyma cluster to enable access to Prometheus metrics
+- Variant 1: In-cluster Grafana: a custom Grafana will be installed in the same Kyma cluster to enable the access to the Prometheus metrics.
 
-- Variant 2: Grafana Cloud: Grafana Cloud is a SaaS platform, integrating metrics, traces and logs with Grafana. This variant will help you understand how third-party monitoring tool outside of your cluster can access metrics of your custom workload in Kyma cluster.
+- Variant 2: Grafana Cloud: Grafana Cloud is a SaaS platform, integrating metrics, traces and logs with Grafana. This variant will help you understand how third-party monitoring tools outside of your cluster can access metrics of your custom workload in the Kyma cluster.
 
-### Variant 1: Install and configure in-cluster Grafana
+### Variant 1: Install and Configure In-Cluster Grafana
 
-We will use [Grafana helm chart](https://github.com/grafana/helm-charts/tree/main/charts/grafana) to install Grafana in Kyma cluster. 
+We will use [Grafana Helm chart](https://github.com/grafana/helm-charts/tree/main/charts/grafana) to install Grafana in the Kyma cluster. 
 
 ```shell
 # add Grafana helm chart repo to your local helm repo
@@ -192,7 +194,7 @@ helm search repo -l grafana/grafana
 helm fetch  grafana/grafana --untar --version 6.29.2
 
 ```
-Once you downloaded the Grafana chart locally, please open the file **grafana/values.yaml** and make following changes. It will add our custom Prometheus server as default datasource for Grafana.
+Once you downloaded the Grafana chart locally, open the **grafana/values.yaml** file and make following changes. It will add our custom Prometheus server as a default datasource for Grafana.
 
 ```diff
 
@@ -217,7 +219,7 @@ Once you downloaded the Grafana chart locally, please open the file **grafana/va
 +        isDefault: true
 ```
 
-Run below command to install the helm chart with your custom values.
+Run the following command to install the Helm chart with your custom values.
 
 ```shell
 helm install mygrafana grafana
@@ -229,13 +231,13 @@ Run below command and access your Grafana instance at http://localhost:3000
 kubectl  port-forward svc/mygrafana 3000:80
 ```
 
-For login credential, the user is **admin** and the password can be retrieved with below command:
+For login credentials, the user is **admin** and the password can be retrieved with the following command:
 
 ```shell
 kubectl get secret --namespace default mygrafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
 ```
 
-You can then navigate to **Explore** from the left sidebar and see what metrics are avaiable. Below screenshot shows an example of custom metric **db_number_idle_connections_all_users** from **day2-service**. 
+Then, navigate to **Explore** from the left sidebar and see what metrics are avaiable. The following screenshot shows an example of custom metric **db_number_idle_connections_all_users** from **day2-service**. 
 
 ![](images/grafana_incluster_explore.png)
 
@@ -245,14 +247,14 @@ In addition, you can also navigate to **Configuration** to check your Prometheus
 
 ### Variant 2: Create and Configure Grafana Cloud Account
 
-To add the custom Prometheus instance in Kyma cluster as the datasource to Grafana Cloud, we need to first enable external access to the service myprometheus-server.
+To add the custom Prometheus instance in the Kyma cluster as the datasource to Grafana Cloud, first we need to enable external access to the service myprometheus-server.
 
-Fist you have to set the environment variable `DOMAIN`: 
+1. Set the environment variable `DOMAIN`: 
 ```shell
 export DOMAIN=$(kubectl config view --minify -o jsonpath='{.clusters[].cluster.server}' | sed -E 's_^https?://api.__')
 ```
 
-Run following commands to expose the service: 
+2. Run the following commands to expose the service: 
 ```shell
 cat <<EOF | kubectl apply -f -
 apiVersion: networking.istio.io/v1beta1
@@ -277,27 +279,25 @@ spec:
 EOF
 ```
 
-Show your Prometheus service with command `echo  https://myprometheus-server.$DOMAIN`. You will need the URL later to configure datasource in Grafana.
+3. Show your Prometheus service with the command `echo  https://myprometheus-server.$DOMAIN`. You will need the URL later to configure datasource in Grafana.
 
 
-To create a free trial account on Grafana Cloud, please visit [here](https://grafana.com/auth/sign-up/create-user?pg=hp&plcmt=hero-btn1&cta=create-free-account) and follow the onscreen process.   Once the account is created, please open the Grafana instance by clicking on **Launch** button
+4. To create a free trial account on Grafana Cloud, see [Grafana Labs](https://grafana.com/auth/sign-up/create-user?pg=hp&plcmt=hero-btn1&cta=create-free-account) and follow the onscreen process. Once the account is created, open the Grafana instance by choosing **Launch**.
 
    ![](images/grafana_cloud_launch.png)
 
-
-Inside the Grafana UI, please navigate to **datasource**.
+5. Inside the Grafana UI, navigate to **datasource**.
 
    ![](images/grafana_cloud_navigate_datasource.png)
-
-
-Then click **Add data source** of type Prometheus. 
+   
+6. Choose **Add data source** of type Prometheus. 
 
    ![](images/grafana_cloud_add_datasource.png)
 
-Add a Prometheus datasource name and the Prometheus URL exposed earlier.
+7. Add a Prometheus datasource name and the Prometheus URL exposed earlier.
 ![](images/grafana_cloud_datasource_configuration.png)
 
 
-Now you should be able to explore the metrics in Grafana Cloud as usual.  Below screenshot shows the custom metrics **db_max_pool_size** which is scraped from **day2-service**. 
+Now you should be able to explore the metrics in Grafana Cloud as usual. The following screenshot shows the custom metrics **db_max_pool_size** which is scraped from **day2-service**. 
 
 ![](images/grafana_cloud_explore.png)

@@ -82,10 +82,9 @@ public class C3P0GaugeController {
             List<String> beanList = attributeClient.retrieveBeanNames(C3P0_JMX_DOMAIN);
 
             for(String bean : beanList){
-                logger.info(bean);
-
+                
                 Object label = attributeClient.retrieveAttributeValue(bean, LABEL_SOURCE, false, null); // label = subaccount ID
-                logger.info("Retrieving C3P0 Pool Metrics for label:" +  label.toString() );
+                logger.info("Retrieving C3P0 Pool Metrics for bean: "+ bean + "  and label:" +  label.toString() );
 
                 AttributeList attrList = attributeClient.retriveAttributeList(bean, attrListString);
                 for(Attribute a : attrList.asList()){

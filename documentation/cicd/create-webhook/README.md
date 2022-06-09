@@ -1,4 +1,4 @@
-# Create a Webhook for the Git Repository
+# Create a Webhook for the GitGub Repository
 
 Now that we have created the jobs for both of our UI's we can trigger the build manually. But what we actually want is that the build is triggered each time when there is a change in the repository automatically. Therefore we will configure a webhook that reacts on changes.
 
@@ -30,9 +30,9 @@ Now that we have created the jobs for both of our UI's we can trigger the build 
 
   ![](./images/06-webhook-05.png)
 
-## Configure the webhook in github
+## Configure the webhook in GitHub
 
-1. Open your repository in github and click on **Settings**
+1. Open your repository in GitHub and click on **Settings**
 2. Select **Hooks**
 3. Click on **Add webhook**
 
@@ -57,6 +57,11 @@ In order to test the webhook you can perform a change in the Easy franchise appl
    ```
    <h1 class="mt-5 mb-5 text-center">User Details</h1>
    ```
+1. Open the Easy Franchise application to see if the UI is correctly updated. On the top right corner in the bar, click on the user icon.
+   ![](./images/06-webhook-07.png)
+
+1. Verify that the page header is called now **User Details**.
+
 1. Save the file and push the changes to the repository.
 
 As soon as the changes are pushed, both jobs are triggered automatically. After the job is finished open the application UI and check if your changes are active.

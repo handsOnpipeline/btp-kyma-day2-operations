@@ -99,7 +99,7 @@ As mentioned in the previous chapter, the Easy Franchise application needs to be
    metering.operations.service: http://localhost:8091/
    ```
 
-### Implementation Alternative with AppRouter
+### Implementation Alternative with Approuter
 
 In the above Java implementation, we select the bearer token and do the base64 decoding in Java. In the Approuter file [app.js](../../../code/metering-dashboard/source/operation-service/app.js) we already do a decoding, which can be reused. 
 You can create a new header **x-user-id** with the user info as shown in the below code snipped:

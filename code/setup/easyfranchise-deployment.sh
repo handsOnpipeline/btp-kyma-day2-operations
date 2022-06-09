@@ -298,7 +298,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     fi
     log "Cluster Access successful"
     echo 
-    
+    echo
 
     log "================================================================================================="
     log "Step 3 - Prepare Cluster for Deployment"

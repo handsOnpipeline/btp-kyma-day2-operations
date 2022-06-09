@@ -24,8 +24,8 @@ spec:
       containers:
       - image: <image-name>
         name: db-service
-        resources: {}
         imagePullPolicy: Always
+        resources: {}
         ports:
           - containerPort: 8080
         volumeMounts:
@@ -62,20 +62,3 @@ spec:
   type: ClusterIP
 status:
   loadBalancer: {}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: db-jmx-metrics
-  namespace: integration
-  labels:
-    app: db-jmx-metrics
-spec:
-  type: ClusterIP
-  ports:
-    - port: 9999
-      protocol: TCP
-      targetPort: 9999  
-  selector:
-    app: db-service
---- 

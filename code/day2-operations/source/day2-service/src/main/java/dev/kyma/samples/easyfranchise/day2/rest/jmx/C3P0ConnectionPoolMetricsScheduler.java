@@ -13,12 +13,6 @@ public class C3P0ConnectionPoolMetricsScheduler { // We are using c3p0 database 
 
   private JmxMBeanClientInterface attributeClient; 
 
-  // cannot use in following way as value injection happens only after constructor call finishes
-  // @Value("${jmx.remote.host}")  
-  // private String remoteHost;
-  
-  // @Value("${jmx.remote.port}")
-  // private int remotePort;
   
   // read propertie from application.properties file.
   public C3P0ConnectionPoolMetricsScheduler(@Value("${jmx.remote.host}") String remoteHost, @Value("${jmx.remote.port}") int remotePort) {
