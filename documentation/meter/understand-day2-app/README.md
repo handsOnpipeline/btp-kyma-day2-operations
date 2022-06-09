@@ -1,7 +1,7 @@
 # Understand the Implementation of the Day2 Application 
 
 Lets first recap the architecture of the EasyFranchise application without metering:
-![](../images/easy-franchise-metering/Slide2.jpeg) <!-- TODO  hier ist was mit den slides schif gegangen, das diagram enthält schon die day2 sachen, im PPT ist der section test "recap EF Architecture" vor slide2. Ich hatte da eigenlich gernde wieder die achitekctur der main mission drinn! -->
+![](../images/easy-franchise-metering/Slide2.jpeg)
 
 To be able to meter **active users** we need new components. Have a look at the enhanced diagram:
 
@@ -9,7 +9,7 @@ To be able to meter **active users** we need new components. Have a look at the 
 
 The new namespace **day2-operations** consists of 3 components:
 - Day2 UI: displays information about active users
-- Day2 AppRouter: routes the different requests
+- Day2 Approuter: routes the different requests
 - Day2 Service: stores user login data and provides metering data to the Day2 UI. 
 
 To be able to persist the user statistics we need:
@@ -20,13 +20,12 @@ To be able to persist the user statistics we need:
 Every time a mentor coordinator uses the Easy Franchise application, his user name will be passed to the Day2 service and saved in the metering schema.
 
 ![](../images/easy-franchise-metering/Slide4.jpeg) 
-<!-- TODO: update diagram -->
 
 Here are the details of the flow:
 1. The mentor coordinator opens the Easy Franchise application.
-1. The AppRouter redirects the user to the UI.
-1. Once the UI is initialized, the UI calls the new user/login API of the Easy Franchise service via the AppRouter.
-1. The AppRouter routes the request to the Easy Franchise service.
+1. The Approuter redirects the user to the UI.
+1. Once the UI is initialized, the UI calls the new user/login API of the Easy Franchise service via the Approuter.
+1. The Approuter routes the request to the Easy Franchise service.
 1. The Easy Franchise service calls the Day2 service and provides tenant and user information from the PUT request header.
 1. The Day2 service persists the login info in a tenant-independent database schema named **Metering**. Current month and year are stored as well.
 
@@ -35,7 +34,6 @@ Here are the details of the flow:
 Once the SAP partner employee opens the Day2 application to see the number of active users, the Day2 service will be requested to load the data saved in the metering schema.
 
 ![](../images/easy-franchise-metering/Slide5.jpeg) 
-<!-- TODO: update diagram  / Wrong order in numbers -->
 
 Here are the details of the flow:
 1. The SAP partner employee opens the Day2 application in a browser. The browser sends a request to the Approuter.
@@ -126,7 +124,6 @@ You can find more about configuring the properties at: [docs.spring.io: Properti
 
 ## Create Metering Database Admin User
 
-<!-- TODO @Alex: please think if this fits to your script setup using  DBADMIN only? -->
 To persist the data in the the database, we recommend that you have a new database user and not reuse an existing one so that you have a clear separation of data. You don't need to create a new database, creating a new user is sufficient. 
 
 1. Get the inital Database Admin User credentials.
@@ -211,8 +208,7 @@ The user interface is developed with [SAP Fundamental Vue Library](https://sap.g
 
 ![](../images/easy-franchise-metering/Slide8.jpeg)
 
->TODO: Matthieu
-> * add more details and explain coding
+We decided to keep the UI very simple as this is not the focus in this mission. So the Day2 UI is based only on a single page where the dashboard is displayed. You can find the details in the file [MeteringDashboard.vue](../../../code/day2-operations/source/day2-ui/src/components/MeteringDashboard.vue).
 
 
 ## Understand the Implementation of the Day2 Approuter
@@ -220,7 +216,7 @@ The user interface is developed with [SAP Fundamental Vue Library](https://sap.g
 ![](../images/easy-franchise-metering/Slide9.jpeg)
 
 
-The **Day2 AppRouter** represents a single entry point to all Day2 microservices.
+The **Day2 Approuter** represents a single entry point to all Day2 microservices.
 We use the [@sap/approuter](https://www.npmjs.com/package/@sap/approuter), which is a Node.js based implementation. 
 
 The sources can be found at: [code/day2-operations/source/day2-approuter](../../../code/day2-operations/source/day2-approuter) 

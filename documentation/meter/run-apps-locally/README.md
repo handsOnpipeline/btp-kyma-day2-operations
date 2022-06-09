@@ -17,18 +17,15 @@ You can use these services locally:
 ### Prerequisites
 - You have prepared the SAP HANA Cloud properties for a JDBC connection. 
 - You have a SAP S/4HANA Cloud system or a Business Partner mock server up and running 
-<!-- TODO: give details where to find info if this is not done -->
 
 ### Configure the hiddenconfig.properties File
 
 To run locally the services listed above, you have to configure some properties in the `hiddenconfig.properties` file:
-1. Open the prepared sources from the previous steps or download the final one from the GitHub [Repository](https://github.com/SAP-samples/btp-kyma-multitenant-extension-day2/tree/day2-final/code/easyfranchise/source/backend). In the **day2-final** branch, you will find the source in the [code/easyfranchise/source/backend](https://github.com/SAP-samples/btp-kyma-multitenant-extension-day2/tree/day2-final/code/easyfranchise/source/backend) folder.
-   
-<!-- TODO check if this link works! -->
+1. Open the prepared sources from the previous steps or download the final one from the GitHub [Repository](../../../code/easyfranchise/source/backend). In the **day2-final** branch, you will find the source in the [code/easyfranchise/source/backend](../../../code/easyfranchise/source/backend) folder.
 
 1. Copy the file ```code/backend/shared-code/src/main/resources/hiddenconfig-template.properties``` to `hiddenconfig.properties` in the same folder.
 
-1. Maintain your SAP HANA Cloud JDBC connection properties in the `db.*` section. This should look like this: <!-- TODO needs mentioning of alternate DB user? (Because old docu recommends to create one...) -->
+1. Maintain your SAP HANA Cloud JDBC connection properties in the `db.*` section. This should look like this:
    ```
    db.name: EasyFranchiseHANADB
    db.sqlendpoint: your_hostname.hanacloud.ondemand.com:443
@@ -144,7 +141,7 @@ To run locally the services listed above, you have to configure some properties 
 
 ## Run the Easy Franchise UI
 
-1. Check that you have defined the URL path of the backend APIs to the local backend services. Open the file [code/easyfranchise/source/ui/src/main.js](../../../code/easyfranchise/) and check the value for ```Vue.prototype.$backendApi``` for: <!-- TODO check file path -->
+1. Check that you have defined the URL path of the backend APIs to the local backend services. Open the file [code/easyfranchise/source/ui/src/main.js](../../../code/easyfranchise/source/ui/src/main.js) and check the value for ```Vue.prototype.$backendApi``` for:
    ```js
    Vue.prototype.$backendApi = "http://localhost:8080/easyfranchise/rest/efservice/v1";
    ```
@@ -199,8 +196,6 @@ To run locally the services listed above, you have to configure some properties 
 
    ![](../images/meeteringDashboardLocaltenant.png)
 
-  <!-- TODO replace picture& texte above if we have subacount display name.-->
-
 1. If you would like to see a second tenant or increase the number of active users, you can achieve this by : 
    - Updating the properties ```devmode.tenantid``` in the ```hiddenconfig.properties``` of the backend services.  Stop, build and start the application again, so that the new tenant ID gets activated and reopen the Easy Franchise UI.
    - (Optional) Running a REST call against the Day2 service via CURL command and fake a user login of, for example, "Jon Smith" for "second-local-tenant-id": 
@@ -211,16 +206,7 @@ To run locally the services listed above, you have to configure some properties 
      --data-raw '{"tenantid": "second-local-tenant-id", "user": "Jon Smith"}
      ```
      
-<!-- TODO: To be moved to Troubleshooting section -->
->**Troubleshooting hint: no active user metering values are shown** 
-> - Check in the console of the Day2 service the return status of the ```user/metric``` call. In case it is 200 as shown in the screenshot below, you have forgotten to set the envitoment variable to indicate the local run. Set ```local_dev=true``` and restart the Opeations service. 
->
->   ![](../images/failingCrosUserMetricCall.png)
-> * Run the REST call against the Day2 service (replace year and month!) and check the result and the logs. 
-
->   ```
->   curl --request GET 'http://localhost:3000/user/metric?year=2022&month=3'
->   ```
+> Note: check our [troubleshooting page](./../../troubleshooting/no-active-user-metering-values/README.md) if you can't see any active user metering values.
 
 ## Result
 

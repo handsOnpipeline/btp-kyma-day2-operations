@@ -38,7 +38,7 @@ export default {
     }
   },
   methods: {
-    // Get userinfo from AppRouter
+    // Get userinfo from Approuter
     async getUserInfo(){
       if(!this.userInfo){
         // Calling API to extract user info from the JWT token

@@ -24,8 +24,8 @@ spec:
       containers:
       - image: <image-name>
         name: db-service
-        resources: {}
         imagePullPolicy: Always
+        resources: {}
         ports:
           - containerPort: 8080
         volumeMounts:

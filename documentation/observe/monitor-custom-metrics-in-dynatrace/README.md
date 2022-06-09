@@ -2,51 +2,51 @@
 
 ## Introduction
 
-Dynatrace is an Application Performance Management tool which provides full-stack insights into your application and its runtime environment.  In this section we will show how to enable monitoring metrics from both Kyma and your application in Dynatrace. 
+Dynatrace is an Application Performance Management tool which provides full-stack insights into your application and its runtime environment. In this chapter, we will show how to enable monitoring metrics from both Kyma and your application in Dynatrace. 
 
 ## Getting Dynatrace Environment
 
 As Dynatrace requires commercial license, different ways of requesting Dynatrace environments are described.
 
-1. Create a trial environment at [Dynatrace](https://www.dynatrace.com/trial/new/) with no cost.
+* Create a trial environment at [Dynatrace](https://www.dynatrace.com/trial/new/) with no cost.
 
-1. Purchase license through Dynatrace or SAP.
+* Purchase license through Dynatrace or SAP.
 
-1. As SAP employee you can request a Dynatrace environment via Dynatrace Monitoring Service as described [here](https://pages.github.tools.sap/apm/docs/environment/hyperscaler/).  In addition, please request CAM profile to manage access to Dynatrace environment as described [here](https://pages.github.tools.sap/apm/docs/#1-get-cam-profiles). 
+* As an SAP employee you can request an internal Dynatrace environment 
 
 You only need to choose one of above options to request a Dynatrace environment. 
 
 ## Deploy Dynatrace Operator and Disable Istio Injection
 
-Kyma uses Istio side-car injection to allow tracing of built-in components. The `dynatrace` namespace must be excluded from this injection for improved performance and stability. Please disable Istio injection following [this step](https://pages.github.tools.sap/apm/docs/installation/kyma/#initial-steps). Afterwards you can deploy OneAgent on each Kubernetes cluster node vi the Dynatrace Operator.  Please follow [the document](https://pages.github.tools.sap/apm/docs/installation/kubernetes/) for further details. 
+Kyma uses Istio side-car injection to allow tracing of built-in components. The `dynatrace` namespace must be excluded from this injection for improved performance and stability. To disable Istio injection, see [Dynatrace for Kyma Monitoring: Disable Istio injection into Dynatrace](https://pages.github.tools.sap/apm/docs/installation/kyma/#initial-steps). 
+Afterwards, you can deploy OneAgent on each Kubernetes cluster node via the Dynatrace Operator. For more information, see [Dynatrace for Kubernetes Monitoring](https://pages.github.tools.sap/apm/docs/installation/kubernetes/). 
 
-
-In case you are using **Dynatrace trial environment**, this step is slightly different. Please navigate to **Infrastructure --> Kubernetes --> Connect automatically via Dynatrace Operator**, fill in necessary info and follow the steps:
+In case you are using **Dynatrace trial environment**, this step is slightly different. Navigate to **Infrastructure** > **Kubernetes** > **Connect automatically via Dynatrace Operator**, fill in necessary information and follow the steps.
 
 ![](images/dynatrace_trial_deployoperator.png)
 
-
 In addition, the settings page for connected Kyma cluster are also slightly different:
+
 ![](images/dynatrace_trial_settings.png)
 
 
-## Configure Istio / Envoy Monitoring
+## Configure Istio/Envoy Monitoring
 
-Kyma comes with service-to-service communication and proxying (Istio-based service mesh). Istio and Envoy metrics can be ingested into Dynatrace via Prometheus integration and pre-build dashboard. Follow [steps](https://pages.github.tools.sap/apm/docs/installation/kyma/istio-envoy) to enable them in Dynatrace.
+Kyma comes with service-to-service communication and proxying (Istio-based service mesh). Istio and Envoy metrics can be ingested into Dynatrace via Prometheus integration and pre-build dashboard. To enable the metrics in Dynatrace, see [Configure Istio/Envoy Monitoring with Dynatrace](https://pages.github.tools.sap/apm/docs/installation/kyma/istio-envoy).
 
-## Ingest Kyma Metrics / Custom Metrics
+## Ingest Kyma Metrics/Custom Metrics
 
-It is also possible to scrape metrics exposed by either Kyma endpoint or your application.  Those metrics can then be received, processed and exported by OpenTelemetry Collector. In our example we are using Prometheus receiver and Dynatrace Exporter to forward the metrics to Dynatrace.   Based on those metrics, you can create your own dashboards for monitoring or alerting.   The [official document](https://pages.github.tools.sap/apm/docs/installation/kyma/metrics) describes two different options to scrape metrics. We suggest to use the second option **Scraping metrics with strict Istio peer authentication** which is the Kyma default behavior. 
+It is also possible to scrape metrics exposed by either Kyma endpoint or your application. These metrics can then be received, processed and exported by OpenTelemetry Collector. In our example, we are using Prometheus receiver and Dynatrace exporter to forward the metrics to Dynatrace. Based on these metrics, you can create your own dashboards for monitoring or alerting. There are two different options to scrape metrics described at [Ingestion of Kyma Metrics into Dynatrace](https://pages.github.tools.sap/apm/docs/installation/kyma/metrics).
+We suggest that you use the second option **Scraping metrics with strict Istio peer authentication** which is the Kyma default behavior. 
 
->NOTE: In case you are using Dynatrace trial environment, the API_ENDPOINT would be different from the documentation. 
+> Note: In case you are using Dynatrace trial environment, the API_ENDPOINT would be different from the one specified in the documentation. 
 > API_ENDPOINT defined by official documentation: https://apm.cf.sap.hana.ondemand.com/e/{ENVIRONMENT_ID}/api/v2/metrics/ingest
 > API_ENDPOINT in trial environment: https://<trial environment ID>.live.dynatrace.com/api/v2/metrics/ingest
 
+The **DB service** of the **Easyfranchise application** uses **Hibernate** as object-relational mapping framework to persist domain model entities to a relational database. The [SynchronizedConnectionMap java class](../../../code/easyfranchise/source/backend\db-service/src/main/java/dev/kyma/samples/easyfranchise/dbservice/SynchronizedConnectionMap.java) make use of the  **C3P0ConnectionProvider class**, provided by Hibernate. This connection provider  uses a [C3P0 connection pool](https://www.mchange.com/projects/c3p0/).
 
-To illustrate exposing custom metrics in [Prometheus format](https://prometheus.io/docs/concepts/data_model/#metric-names-and-labels) through your own application, we provide following example.  
-
-- [C3P0 DB connection pool metrics](../../../code/day2-operations/source/day2-service/src/main/java/dev/kyma/samples/easyfranchise/day2/rest/jmx/C3P0ConnectionPoolMetricsScheduler.java) implemented using [Prometheus Java client](https://github.com/prometheus/client_java). In our DB-service [c3p0 pool](https://www.mchange.com/projects/c3p0/) is used to access EasyFranchise database.  We collected following metrics to provide real time monitoring of database connecion usage for each of the subscribed tenant.
-
+To illustrate how custom metrics are exposed in [Prometheus format](https://prometheus.io/docs/concepts/data_model/#metric-names-and-labels) through your own application, we provide the following example:
+[C3P0 DB connection pool metrics](../../../code/day2-operations/source/day2-service/src/main/java/dev/kyma/samples/easyfranchise/day2/rest/jmx/C3P0ConnectionPoolMetricsScheduler.java) implemented using [Prometheus Java client](https://github.com/prometheus/client_java). In our DB-service [c3p0 pool](https://www.mchange.com/projects/c3p0/) is used to access the database of the Easy Franchise application. We collected the following metrics to provide a real-time monitoring of the database connecion usage for each of the subscribed tenants:
   - db_number_connections_all_users
   - db_number_idle_connections_all_users
   - db_number_busy_connections_all_users
@@ -54,13 +54,12 @@ To illustrate exposing custom metrics in [Prometheus format](https://prometheus.
   - db_max_pool_size
 
 
-Below diagram shows the flow of custom metrics:
+The diagram below shows the flow of the custom metrics:
 
-<!-- TODO Matthieu: Adapt below diagram to the style of our solution diagram -->
 ![](images/dynatrace_otel_custommetrics_flow.png)
 
 
-1. C3P0 database connection pool is created by *db-service*. The pool metrics are collected periodically by *day2-service* via JMX.   *day2-service* exposes collected metrics through a HTTP endpoint in Prometheus format as below. 
+1. C3P0 database connection pool is created by *db-service*. The pool metrics are collected periodically by *day2-service* via JMX. *day2-service* exposes collected metrics through an HTTP endpoint in Prometheus format as shown below:
 
 ```shell
 # HELP db_number_idle_connections_all_users Number of idle database connections for all users
@@ -85,7 +84,8 @@ db_number_connections_all_users{Tenant="DAY2ADMIN",} 10.0
 db_number_connections_all_users{Tenant="CITY-SCOOTER",} 10.0
 ```
 
-2.  *OpenTelemetry Collector* retrieves the metrics through above HTTP endpoints with following configurations. Notes parameter **metrics_path** and **target** together points to the HTTP endpoint URL (e.g.: http://day2-service.day2-operations.svc.cluster.local:8091/prometheus/metrics) 
+2.  *OpenTelemetry collector* retrieves the metrics through the HTTP endpoints above with the following configurations. 
+  > Note: both parameters **metrics_path** and **target** point to the HTTP endpoint URL (e.g.: http://day2-service.day2-operations.svc.cluster.local:8091/prometheus/metrics) 
 
 ```yaml
       prometheus:
@@ -104,18 +104,18 @@ db_number_connections_all_users{Tenant="CITY-SCOOTER",} 10.0
                 - targets:
                   - 'day2-service.day2-operations.svc.cluster.local:8091'               
 ```
-The complete file *otel-agent-mtls.yaml* with above configuration can be found at [here](../../../code/day2-operations/deployment/k8s/otel-agent-mtls.yaml)
+The complete file *otel-agent-mtls.yaml* with the configuration above can be found at the [otel-agent-mtls.yaml](../../../code/day2-operations/deployment/k8s/otel-agent-mtls.yaml) file.
 
-3. With *Dynatrace exporter* from OpenTelemetry collector the metrics are forwarded to Dynatrace instance.  In Dynatrace you can create dashboard based on above custom metrics. 
+3. With the *Dynatrace exporter* from the *OpenTelemetry collector*, the metrics are forwarded to the Dynatrace instance. In Dynatrace, you can create a dashboard based on the custom metrics above. 
 
 ![](images/dynatrace_custommetrics.png)
 
 
-### JMX metrics for C3P0 connection pool
+### JMX Metrics for C3P0 Connection Pool
 
-The flow of retrieving C3P0 connection pool metrics is discussed in previous section. In this section we will briefly discuss some implementation considerations.
+The flow for retrieving C3P0 connection pool metrics is discussed in the previous section. In this section, we will briefly discuss some implementation considerations.
 
-- In *day2-service* we implemented a scheduler to poll the metrics perodically through JMX port 9999 of db-service. 
+- In *day2-service*, we implemented a scheduler to poll the metrics perodically through JMX port 9999 of db-service. 
 
 ```java
   public C3P0ConnectionPoolMetricsScheduler(@Value("${jmx.remote.host}") String remoteHost, @Value("${jmx.remote.port}") int remotePort) {
@@ -135,7 +135,7 @@ The flow of retrieving C3P0 connection pool metrics is discussed in previous sec
 
 ```
 
-- To enable access to *db-service* JMX port, simply adapt following command line parameters in the [Dockerfile-db-service](../../../code/easyfranchise/deployment/docker/Dockerfile-db-service).
+- To enable the access to *db-service* JMX port, simply adapt the following command line parameters in the [Dockerfile-db-service](../../../code/easyfranchise/deployment/docker/Dockerfile-db-service).
 
 ```Diff
 
@@ -149,7 +149,7 @@ The flow of retrieving C3P0 connection pool metrics is discussed in previous sec
 +CMD ["java", "-Dcom.sun.management.jmxremote.port=9999", "-Dcom.sun.management.jmxremote.authenticate=false", "-Dcom.sun.management.jmxremote.ssl=false", "-cp",  "/opt/app/*", "dev.kyma.samples.easyfranchise.ServerApp", "8080"] 
 ```
 
-Enable jmx port access within cluster by adding following configuration to [db-service.yaml](../../../code/easyfranchise/deployment/k8s/db-service.yaml)
+Enable the JMX port access within the cluster by adding the following configuration to [db-service.yaml](../../../code/easyfranchise/deployment/k8s/db-service.yaml)
 
 ```yaml
 ---
@@ -170,7 +170,7 @@ spec:
     app: db-service
 ```
 
-- We are using [Prometheus Java client](https://github.com/prometheus/client_java) to store and expose the metrics in Prometheus format. There is another popular package [Micrometer](https://micrometer.io/) which could serve similar purpose. However, we decided not to use it as it [lacks native support of dynamic label for gague](https://github.com/micrometer-metrics/micrometer/issues/535) (In Micrometer the term *Tag* is used, whereas in Prometheus *Label* is used).  In our application we need to be able to dynamically add label to metrics based on subscribed tenant name, such as *CITY-SCOOTER*. Prometheus Java client supports **defining label name** and **adding lable value** at separate time.
+- We are using [Prometheus Java client](https://github.com/prometheus/client_java) to store and expose the metrics in Prometheus format. There is another popular package [Micrometer](https://micrometer.io/) which could serve a similar purpose. However, we decided not to use it as it [lacks native support of dynamic label for gague](https://github.com/micrometer-metrics/micrometer/issues/535) (In Micrometer the term *Tag* is used, whereas in Prometheus *Label* is used).  In our application, we need to be able to add a label to metrics dynamically based on the subscribed tenant name, such as *CITY-SCOOTER*. Prometheus Java client supports **defining label name** and **adding lable value** at a separate time.
 
 ```java
     static String LABEL_NAMES = "Tenant";
@@ -197,7 +197,7 @@ spec:
     }
 ```
 
-- When deploying our **day2-service** in Kyma, we need to disable Istio injection which interfere the OpenTelemtry collector from accessing exposed HTTP endpoint properly.
+- When deploying our **day2-service** in Kyma, we need to disable the Istio injection which prevents the OpenTelemtry collector from accessing the exposed HTTP endpoint properly.
 
 ```yaml
 
