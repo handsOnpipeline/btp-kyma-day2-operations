@@ -1,0 +1,58 @@
+serviceAccounts:
+  alertmanager:
+    create: false # serviceAccount for alertmanager is not required as alertmanager will not be installed
+  nodeExporter:
+    create: false # serviceAccount for nodeExporter is not required as nodeExporter will not be installed
+  pushgateway:
+    create: false # serviceAccount for pushgateway is not required as pushgateway will not be installed
+
+alertmanager:
+  enabled: false  ## If false, alertmanager will not be installed
+
+nodeExporter:     
+  enabled: false  ## If false, node-exporter will not be installed
+
+pushgateway:
+  enabled: false  ## If false, pushgateway will not be installed
+
+kubeStateMetrics:
+  enabled: false  ## If false, kube-state-metrics sub-chart will not be installed
+
+server:
+  global:
+    scrape_interval: 15s  ## How frequently to scrape targets by default
+
+  persistentVolume:
+    ## If true, Prometheus server will create/use a Persistent Volume Claim
+    ## If false, use emptyDir
+    enabled: false    
+
+
+## Prometheus server ConfigMap entries
+##
+serverFiles:
+  prometheus.yml:
+    scrape_configs:
+      - job_name: db_jmx_metrics
+        scheme: http 
+        scrape_interval: 15s
+        metrics_path: '/prometheus/metrics'
+        static_configs:
+          - targets:
+            - day2-service.day2-operations.svc.cluster.local:8091
+
+      - job_name: 'prometheus-federate' # https://prometheus.io/docs/prometheus/latest/federation/#configuring-federation
+        scrape_interval: 5m
+        scrape_timeout: 30s
+        honor_labels: true
+        metrics_path: '/federate'
+        params:
+          'match[]':
+            - '{__name__=~"event(.*)"}'
+            - '{__name__=~"loki(.*)",__name__!="loki_ingester_checkpoint_duration_seconds"}'
+            - '{__name__=~"fluentbit(.*)"}'
+            - '{__name__=~"servicecatalog(.*)"}'
+            - '{__name__=~"controller_runtime(.*)"}'
+        static_configs:
+          - targets:
+            - 'monitoring-prometheus.kyma-system.svc.cluster.local:9090'

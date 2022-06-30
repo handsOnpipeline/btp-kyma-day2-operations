@@ -46,7 +46,7 @@ The mission is provided on the "as-is" basis. Currently, there are no known issu
 
 Check if you find an answer in the [Troubleshooting](./documentation/troubleshooting/README.md) section.
 
-Create an issue to get support, report a bug at the [Issues](https://github.com/SAP-samples/btp-kyma-multitenant-extension/issues/new/choose) section or interact with us via the SAP Discovery Center, in the *Conversations* section of the Project Board of the mission..
+Create an issue to get support, report a bug at the [Issues](https://github.com/SAP-samples/btp-kyma-day2-operations/issues/new/choose) section or interact with us via the SAP Discovery Center, in the *Conversations* section of the Project Board of the mission..
 
 ## How to Provide Feedback?
 

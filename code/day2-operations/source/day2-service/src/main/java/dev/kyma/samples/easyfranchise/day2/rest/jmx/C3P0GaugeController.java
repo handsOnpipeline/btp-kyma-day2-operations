@@ -1,3 +1,7 @@
+/**
+ * This class defines all metrics of a database pool using  C3P0 library to access databases. 
+ * Once all metrics are retrieved via function retrieveMetrics(...), they will be stored of Prometheus Gauge type
+ */
 package dev.kyma.samples.easyfranchise.day2.rest.jmx;
 
 import java.lang.Integer;

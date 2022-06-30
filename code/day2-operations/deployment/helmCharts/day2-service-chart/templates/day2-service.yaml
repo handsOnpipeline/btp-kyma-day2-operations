@@ -15,7 +15,6 @@ spec:
       creationTimestamp: null
       labels:
         app: day2-service
-        sidecar.istio.io/inject: "false" # disable istio injection, otherwise facing "connection reset by peer" error, when in use with Dynatrace in the Observability context
     spec:
       imagePullSecrets:
         - name: registry-secret
@@ -63,7 +62,7 @@ spec:
   - name: 8091-8091    
     port: 8091
     protocol: TCP
-    targetPort: 8091
+    targetPort: 8091  
   selector:
     app: day2-service
   type: ClusterIP

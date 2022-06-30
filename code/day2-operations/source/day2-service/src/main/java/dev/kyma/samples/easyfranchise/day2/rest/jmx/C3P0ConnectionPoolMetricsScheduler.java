@@ -1,3 +1,9 @@
+/**
+ * This class implement a springboot scheduler to retrieve C3P0 database pool metrics via JMX. 
+ * For more details refer to https://www.mchange.com/projects/c3p0/ 
+ * 
+ * The class is initialized by Springboot with JMX server host and port. They are defined in application.properties file.
+ */
 package dev.kyma.samples.easyfranchise.day2.rest.jmx;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -7,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Component
-public class C3P0ConnectionPoolMetricsScheduler { // We are using c3p0 database wrapper in EasyFranchise app. For more details refer to https://www.mchange.com/projects/c3p0/
+public class C3P0ConnectionPoolMetricsScheduler {
 
   private static final Logger logger = LoggerFactory.getLogger(C3P0ConnectionPoolMetricsScheduler.class);
 

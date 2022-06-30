@@ -1,41 +1,40 @@
-# Subscribe to "Continuous Integration and Delivery"
+# Subscribe to the SAP Continuous Integration and Delivery Service
 
-The following chapter can be skipped if you have used the BTP-Setup-Automator for preparing your subaccount as the necessary steps have already been performed. 
+The following chapter can be skipped if you have used the btp-setup-automator for preparing your subaccount as the necessary steps have already been performed. 
 
-## Add Entitlement for Continuous Integration & Delivery
+## Add Entitlement for the Continuous Integration & Delivery Service
 
-> **NOTE** If you used the SAP BTP Setup Automator script for this mission, the entitlements, subscription and role assignment is already done for you. Skip those steps and continue with 
-> "Create CI/CD Job for Easy Franchise UI"
+> **NOTE** If you used the btp-setup-automator script for this mission, the entitlements, subscription and role assignment are already done for you. Skip these steps and continue with *Create Continuous Integration & Delivery Job for Easy Franchise UI*.
 
-1. Navigate to **Entitlements** within the **EasyFranchise subaccount**
-2. Click on **Configure Entitlements**
+1. Navigate to **Entitlements** within the **EasyFranchise** subaccount.
+2. Choose **Configure Entitlements**.
    
    ![](./images/01-Entitlement-01.png)
-3. Click on **Add Service**
-4. In the **Entitlements** Dialog 
+3. Choose **Add Service**.
+4. In the **Entitlements** dialog:
 
-   * Select search for **Continuous Integration & Delivery**
-   * Select the **free (Application)** plan
-   * Click **Add 1 Service Plan**
+   * Search for **Continuous Integration & Delivery**.
+   * Select the **free (Application)** plan.
+   * Choose **Add 1 Service Plan**.
 
      ![](./images/01-Entitlement-02.png)
 
 ## Create the Application Subscription
 
-1. In the EasyFranchise subaccount navigate to the **Service Marketplace**
-2. Select the **Continuous Integration and Delivery** Entry
-3. Click on **Create**
-4. In the **New Instance Subscription Dialog** the plan **free** should be preselected. Click on **Create**
+1. In the **EasyFranchise** subaccount, navigate to **Service Marketplace**.
+2. Choose the **Continuous Integration and Delivery** tile.
+3. Choose **Create**.
+4. In the **New Instance Subscription** dialog, the plan **free** should be preselected. Choose **Create**.
 
    ![](./images/02-Subscription.png)
 
-## Assignee CI/CD Roles to you
+## Assign the Continuous Integration & Delivery Roles to Your User
 
-1. In the **EasyFranchise** subaccount click on **Users**
-2. Search for your user and click on it
-3. Choose **Assign Role Collection**
+1. In the **EasyFranchise** subaccount, choose **Security** > **Users**.
+2. Search for your user and select it.
+3. Choose **Assign Role Collection**.
 
    ![](./images/03-Role-Assignement.png)
-4. In the **Assign Role Collection** dialog assign the **CICD Service Administrator** and the **CICD Service Developer** role and click on **Assign Role Collection**
+4. In the **Assign Role Collection** dialog, assign the **CICD Service Administrator** and the **CICD Service Developer** role and choose **Assign Role Collection**.
 
    ![](./images/03-Role-Assignement-02.png)

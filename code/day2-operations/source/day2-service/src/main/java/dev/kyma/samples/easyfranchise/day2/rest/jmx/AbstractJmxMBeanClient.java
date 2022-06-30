@@ -1,3 +1,6 @@
+/**
+ * This class implement interface JmxMBeanClientInterface, and define connection status of JMX client 
+ */
 package dev.kyma.samples.easyfranchise.day2.rest.jmx;
 
 import java.io.IOException;

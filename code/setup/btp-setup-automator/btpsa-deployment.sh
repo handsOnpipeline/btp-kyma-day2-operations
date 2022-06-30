@@ -61,10 +61,10 @@ case $VARIANT_NUMBER in
     BTPSA_KYMA_IMAGE_TAG="main"
   ;;&    
   2)
-    BTPSA_KYMA_IMAGE_TAG="final"
-    log "Checkout final branch"
+    BTPSA_KYMA_IMAGE_TAG="endresult"
+    log "Checkout endresult branch"
     cd /home/user/tutorial || exit
-    git checkout final
+    git checkout endresult
   ;;          
 esac
 

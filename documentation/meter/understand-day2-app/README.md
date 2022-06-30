@@ -1,7 +1,7 @@
 # Understand the Implementation of the Day2 Application 
 
 Lets first recap the architecture of the EasyFranchise application without metering:
-![](../images/easy-franchise-metering/Slide2.jpeg)
+![](https://raw.githubusercontent.com/SAP-samples/btp-kyma-multitenant-extension/main/documentation/images/easyfranchise-diagrams/Slide4.jpeg)
 
 To be able to meter **active users** we need new components. Have a look at the enhanced diagram:
 
@@ -40,7 +40,8 @@ Here are the details of the flow:
 1. The end user is redirected to the SAP Authorization and Trust Management service to log in.
 1. The Approuter redirects to Day2 UI. 
 1. The UI sends a request to Day2 service via the Day2 Approuter.
-1. The Day2 service receives the request and reads the active users data from the database.
+1. The Day2 service receives the request.
+1. The Day2 service reads the active users data from the database.
 
 ## Details of the Metering Schema
 Due to privacy, we aren't persisting each login with its timestamp in the database. As only the number of active users per month and tenant is needed, it is sufficient to save the user name, tenantId and the period (month+year). 
@@ -70,7 +71,7 @@ curl --request PUT 'http://localhost:3000/user/login' \
   --data-raw '{
      "tenantid": "tenant1",
      "user": "Jon Smith"    
-}
+}'
  ```
 
 The **Day2 UI** will call:
@@ -87,8 +88,8 @@ An example JSON response of the above rest call is:
   
     ```
     [
-        {"TENANTID": "tenant1", "ACTIVEUSERS": 1001 },
-        {"TENANTID": "tenant2", "ACTIVEUSERS": 42 }
+        {"tenantid": "tenant1", "activeUsers": 1001 },
+        {"tenantid": "tenant2", "activeUsers": 42 }
     ]
     ```
 
@@ -124,7 +125,9 @@ You can find more about configuring the properties at: [docs.spring.io: Properti
 
 ## Create Metering Database Admin User
 
-To persist the data in the the database, we recommend that you have a new database user and not reuse an existing one so that you have a clear separation of data. You don't need to create a new database, creating a new user is sufficient. 
+> **Note:** If you used the btp-setup-automator to setup the entire application including the Day 2 services, there is no additional user/schema for the metering data. Everything will be stored with the DBADMIN user within it's default schema so the next step can be skipped in that case.
+
+To persist the data in the the database, we recommend that you have a new database user and not reuse an existing one so that you have a clear separation of data. You don't need to create a new database, creating a new user is sufficient.
 
 1. Get the inital Database Admin User credentials.
 2. Open the **SAP HANA Database Explorer** and run the following SQL statement to create a new user called **EFMETERINGADMIN** within the group **EFOPERATORS**. Don't forget to replace the ```<YOURPASSWORD>```.
@@ -140,12 +143,12 @@ To persist the data in the the database, we recommend that you have a new databa
 
 ## Add Database Details in the Application Properties
 
-Once the database user has been created, we can configure the database source properties. 
+Once the database user has been created, we can configure the database source properties.
 
 1. Copy of [code/day2-operations/source/day2-service/application-template.properties](../../../code/day2-operations/source/day2-service/application-template.properties)  as **application.properties**
 2. Update the values for those properties:
    * datasource.sqlendpoint: SAP HANA sql endpoint
-   * spring.datasource.username: EFMETERINGADMIN 
+   * spring.datasource.username: EFMETERINGADMIN (or DBADMIN if you used the btp-setup-automator)
    * spring.datasource.password: ```<YOURPASSWORD for EFMETERINGADMIN>```
 
 ## Build and Test Run the Day2 Service Locally
@@ -196,7 +199,7 @@ Once the database user has been created, we can configure the database source pr
    You should then get a JSON response as follow:
 
    ```json
-   [{ "TENANTID": "123456789-local-tenant-id", "ACTIVEUSERS": 1 }]
+   [{ "tenantid": "123456789-local-tenant-id", "activeUsers": 1 }]
    ```
 
 1. If you like, add other users and/or other tenants and verify the results.

@@ -1,3 +1,7 @@
+/**
+ * This class extends from abstract class AbstractJmxMBeanClient and implement the abstract functions:
+ * doRetrieveAttributeValue(), doOpenConnection() and doCloseConnection().
+ */
 package dev.kyma.samples.easyfranchise.day2.rest.jmx;
 
 import java.io.IOException;

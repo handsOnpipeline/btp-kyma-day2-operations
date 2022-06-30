@@ -25,7 +25,7 @@ To run locally the services listed above, you have to configure some properties 
 
 1. Copy the file ```code/backend/shared-code/src/main/resources/hiddenconfig-template.properties``` to `hiddenconfig.properties` in the same folder.
 
-1. Maintain your SAP HANA Cloud JDBC connection properties in the `db.*` section. This should look like this:
+1. Maintain your SAP HANA Cloud JDBC connection properties in the `db.*` section. This should look like this (use DBADMIN in case you have used the btp-setup-automator:
    ```
    db.name: EasyFranchiseHANADB
    db.sqlendpoint: your_hostname.hanacloud.ondemand.com:443
