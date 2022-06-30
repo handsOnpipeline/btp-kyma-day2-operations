@@ -195,12 +195,30 @@ export default {
     updateNavButtonStatus(newStatus){
         console.log("[DEBUG] Updating NavButtonStatus with: ", newStatus);
         this.showNavButtonStatus = newStatus;
-    }
+    },
+     // Calling Metering API to register the user
+    logUser(){
+      const apiUrl = this.$backendApi + "/meter-user-login";
+      fetch(
+      apiUrl,
+      {
+       method: "PUT"  
+      }
+    )
+    .then(response => {
+      console.log("[DEBUG] Login user in EF Service: " + response);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  },
+
   }, 
   mounted: function() {
     this.loadAllFranchises();
     this.loadAllCoordinators();
     this.checkandFillCompanyDetails();
+    this.logUser();
   }
 }
 </script>

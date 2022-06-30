@@ -1,3 +1,7 @@
+/**
+ * This interface defines methods with which JMX attributes and bean can be retrieved.
+ * In addition, it also defines interface to manage JMX connection lifecycle as JMX client
+ */
 package dev.kyma.samples.easyfranchise.day2.rest.jmx;
 
 import java.io.IOException;

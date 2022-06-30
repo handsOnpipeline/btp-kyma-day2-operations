@@ -16,18 +16,18 @@ data:
       prometheus:
         config:
           scrape_configs:
-            - job_name: 'db_jmx_metrics'
-              tls_config:
-                ca_file: /etc/istio-output-certs/root-cert.pem
-                cert_file: /etc/istio-output-certs/cert-chain.pem
-                insecure_skip_verify: true
-                key_file: /etc/istio-output-certs/key.pem
-              scheme: http 
-              scrape_interval: 15s
-              metrics_path: '/prometheus/metrics'
-              static_configs:
-                - targets:
-                  - 'day2-service.day2-operations.svc.cluster.local:8091'             
+            # - job_name: 'db_jmx_metrics'
+            #   tls_config:
+            #     ca_file: /etc/istio-output-certs/root-cert.pem
+            #     cert_file: /etc/istio-output-certs/cert-chain.pem
+            #     insecure_skip_verify: true
+            #     key_file: /etc/istio-output-certs/key.pem
+            #   scheme: https 
+            #   scrape_interval: 15s
+            #   metrics_path: '/prometheus/metrics'
+            #   static_configs:
+            #     - targets:
+            #       - 'day2-service.day2-operations.svc.cluster.local:8091'             
             - job_name: 'prometheus-federate'
               scrape_timeout: 30s
               honor_labels: false
