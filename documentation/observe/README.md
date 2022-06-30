@@ -4,5 +4,6 @@ Observability is the ability to inspect the internal states of a system through 
 
 1. [Exposing built-in Grafana securely with Identity Authentication(IAS)](expose-grafana-with-ias/README.md) 
 1. [Exporting application logs to external logging tools](export-app-logs/README.md)
-1. [Monitoring Kyma and Custom Workload Metrics with Dynatrace](monitor-custom-metrics-in-dynatrace/README.md)
-1. [Monitoring Kyma and Custom Workload Metrics with Custom Prometheus](monitor-custom-metrics-with-prometheus/README.md)
+1. [Monitoring Kyma in Dynatrace](monitor-kyma-in-dynatrace/README.md)
+1. [Monitoring Custom Metrics in Dynatrace](monitor-custom-metrics-in-dynatrace/README.md)
+1. [Monitoring Kyma and Custom Workload Metrics in Custom Prometheus](monitor-kyma-and-custom-metrics-in-prometheus/README.md)

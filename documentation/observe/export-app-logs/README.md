@@ -1,7 +1,8 @@
 # Export Application Logs to External Logging Tools
 
 ## Introduction
-By default, a Fluent Bit instance has been configured in the **kyma-system** namespace. Then, it forwards the logs to a Loki instance inside the **kyma-system** namespace. To access the Loki instance, see [Exposing built-in Grafana securely with Identity Authentication(IAS)](/documentation/observe/expose-grafana-with-ias/README.md). However, the Fluent Bit instance in the **kyma-system** namespace cannot be extended to forward logs to external tooling. This tutorial describes how to install a custom log collector in a custom namespace, then export the logs to an external logging tools such as an ELK stack (Elasticsearch and Kibana).
+
+By default, a Fluent Bit instance, a lightweight log processor and forwarder, has been configured in the **kyma-system** namespace to collect logs from multiple sources. Then, it forwards the logs to a Loki (scalable log aggregation system from Grafana) instance inside the **kyma-system** namespace. To access the Loki instance, see [Exposing built-in Grafana securely with Identity Authentication(IAS)](/documentation/observe/expose-grafana-with-ias/README.md). However, the Fluent Bit instance in the **kyma-system** namespace cannot be extended to forward logs to external tooling. This tutorial describes how to install a custom log collector in a custom namespace, then export the logs to an external logging tools such as an ELK stack (Elasticsearch and Kibana).
 
 The diagram below shows the target setup of our scenario.  
 
@@ -28,8 +29,9 @@ We are using the official [Elastic Cloud on Kubernetes](https://www.elastic.co/g
 
 > Note: In the diagram above, the ELK stack is depicted as "External Custom Logging Stack" in a second Kyma cluster to illustrate better the flexibility of the scenario. You can certainly deploy ELK in the same Kyma cluster where your Easy Franchise application is running.
 
+1. Install Elastic CRD and the operator with its RBAC rules.
 ```shell
-# Install Elastic CRD and the operator with its RBAC Rules  https://www.elastic.co/guide/en/cloud-on-k8s/1.9/k8s-deploy-eck.html
+# https://www.elastic.co/guide/en/cloud-on-k8s/1.9/k8s-deploy-eck.html
 
 kubectl apply -f https://download.elastic.co/downloads/eck/1.9.1/crds.yaml
 
@@ -37,7 +39,7 @@ kubectl apply -f https://download.elastic.co/downloads/eck/1.9.1/operator.yaml
 
 ```
 
-Then, deploy a new instance of Elasticsearch and Kibana respectively. 
+2. Deploy a new instance of Elasticsearch and Kibana respectively. 
 
 
 ```shell
@@ -60,7 +62,7 @@ kubectl apply -f kibana-expose.yaml
 
 ```
 
-Once the resources above are deployed, you can check the status of the deployment with the following command:
+3. Once the resources above are deployed, you can check the status of the deployment with the following command:
 
 ```shell
 $ kubectl get elastic
@@ -95,7 +97,7 @@ kubectl get secret ef-elasticsearch-es-elastic-user -o go-template='{{.data.elas
 
 The **login credentials**  will also be needed for configuring the Fluent Bit instance in the next step.
 
-## Install Log Collector Fluent Bit
+## Install A Second Fluent Bit in Custom Namespace
 
 We will install the log collector Fluent Bit in a custom namespace.  Fluent Bit collects logs on all nodes in the Kyma cluster and forwards to Elasticsearch which is deployed in the previous step. Open the file [fluentbit.yaml](/code/day2-operations/deployment/k8s/fluentbit.yaml), and replace the following parameter with your own value:
 
@@ -148,7 +150,7 @@ You should see an index with prefix "fluentbit".
 
 ## Troubleshooting
 
-- Check the PVC usage of Elasticsearch
+- Check the PVC (PersistentVolumeClaim) usage of Elasticsearch in Kyma cluster
 
   * Option 1: command line
 
