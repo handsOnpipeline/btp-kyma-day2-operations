@@ -21,29 +21,34 @@ The diagram below shows the flow of the custom metrics:
 ![](images/dynatrace_otel_custommetrics_flow.png)
 
 
-1. C3P0 database connection pool is created by *db-service*. The pool metrics are collected periodically by *day2-service* via JMX. *day2-service* exposes collected metrics through an HTTP endpoint in Prometheus format as shown below:
+1. C3P0 database connection pool is created by *db-service*. The pool metrics are collected periodically by *day2-service* via JMX. *day2-service* exposes collected metrics through an HTTP endpoint in Prometheus format as shown below. As EasyFranchise is a multi tenant app,  for each subaccount there is a corresponding database pool allocated. The database pool name of the provider subaccount (where app is deployed) is by default `DBADMIN`, while the pool name for each subscribed customer inherits from its subaccount domain name, e.g. "CITY-SCOOTER".
 
 ```shell
 # HELP db_number_idle_connections_all_users Number of idle database connections for all users
 # TYPE db_number_idle_connections_all_users gauge
-db_number_idle_connections_all_users{Tenant="DAY2ADMIN",} 10.0
-db_number_idle_connections_all_users{Tenant="CITY-SCOOTER",} 10.0
+db_number_idle_connections_all_users{Tenant="DBADMIN",} 10.0
+db_number_idle_connections_all_users{Tenant="<Customer_Subaccount_Domain_1>",} 10.0
+db_number_idle_connections_all_users{Tenant="<Customer_Subaccount_Domain_2>",} 10.0
 # HELP db_number_busy_connections_all_users Number of busy database connections for all users
 # TYPE db_number_busy_connections_all_users gauge
-db_number_busy_connections_all_users{Tenant="DAY2ADMIN",} 0.0
-db_number_busy_connections_all_users{Tenant="CITY-SCOOTER",} 0.0
+db_number_busy_connections_all_users{Tenant="DBADMIN",} 0.0
+db_number_busy_connections_all_users{Tenant="<Customer_Subaccount_Domain_1>",} 0.0
+db_number_busy_connections_all_users{Tenant="<Customer_Subaccount_Domain_2>",} 0.0
 # HELP db_min_pool_size Min number of database connections
 # TYPE db_min_pool_size gauge
-db_min_pool_size{Tenant="DAY2ADMIN",} 10.0
-db_min_pool_size{Tenant="CITY-SCOOTER",} 10.0
+db_min_pool_size{Tenant="DBADMIN",} 10.0
+db_min_pool_size{Tenant="Customer_Subaccount_Domain_1",} 10.0
+db_min_pool_size{Tenant="Customer_Subaccount_Domain_2",} 10.0
 # HELP db_max_pool_size Max number of database connections
 # TYPE db_max_pool_size gauge
-db_max_pool_size{Tenant="DAY2ADMIN",} 40.0
-db_max_pool_size{Tenant="CITY-SCOOTER",} 40.0
+db_max_pool_size{Tenant="DBADMIN",} 40.0
+db_max_pool_size{Tenant="Customer_Subaccount_Domain_1",} 40.0
+db_max_pool_size{Tenant="Customer_Subaccount_Domain_2",} 40.0
 # HELP db_number_connections_all_users Number of database connections for all users
 # TYPE db_number_connections_all_users gauge
-db_number_connections_all_users{Tenant="DAY2ADMIN",} 10.0
-db_number_connections_all_users{Tenant="CITY-SCOOTER",} 10.0
+db_number_connections_all_users{Tenant="DBADMIN",} 10.0
+db_number_connections_all_users{Tenant="Customer_Subaccount_Domain_1",} 10.0
+db_number_connections_all_users{Tenant="Customer_Subaccount_Domain_2",} 10.0
 ```
 
 2.  *OpenTelemetry collector* retrieves the metrics through the HTTP endpoints above with the following configurations.  Use the `tls_config` and `scheme` for services that need strict peer authentication, as shown in the following example. The Collector Configuration uses an Istio sidecar to receive a certificate, but does not intercept any traffic.

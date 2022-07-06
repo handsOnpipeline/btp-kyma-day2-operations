@@ -1,4 +1,4 @@
-# Understand the Implementation of the Day2 Application 
+# Understand the Implementation of the Day2 Application
 
 Lets first recap the architecture of the EasyFranchise application without metering:
 ![](https://raw.githubusercontent.com/SAP-samples/btp-kyma-multitenant-extension/main/documentation/images/easyfranchise-diagrams/Slide4.jpeg)
@@ -13,7 +13,8 @@ The new namespace **day2-operations** consists of 3 components:
 - Day2 Service: stores user login data and provides metering data to the Day2 UI. 
 
 To be able to persist the user statistics we need:
-- **metering database schema** in the existing **SAP HANA Cloud**. 
+
+- **metering database schema** in the existing **SAP HANA Cloud**. Note, that for simplicity we reuse the DBADMIN database user and his default schema to store the metering data as well. In a productive environment it would be recommended to create and use a metering database user and separate the easy franchise application data from the metering data by different database users.
 
 ## Understand the Data flow - User Login
 
@@ -27,11 +28,11 @@ Here are the details of the flow:
 1. Once the UI is initialized, the UI calls the new user/login API of the Easy Franchise service via the Approuter.
 1. The Approuter routes the request to the Easy Franchise service.
 1. The Easy Franchise service calls the Day2 service and provides tenant and user information from the PUT request header.
-1. The Day2 service persists the login info in a tenant-independent database schema named **Metering**. Current month and year are stored as well.
+1. The Day2 service persists the login info in a tenant-independent database table. Current month and year are stored as well.
 
 ## Understand the Data flow - Displaying the Active Users 
 
-Once the SAP partner employee opens the Day2 application to see the number of active users, the Day2 service will be requested to load the data saved in the metering schema.
+Once the SAP partner employee opens the Day2 application to see the number of active users, the Day2 service will be requested to load the data saved in the metering table.
 
 ![](../images/easy-franchise-metering/Slide5.jpeg) 
 
@@ -43,8 +44,8 @@ Here are the details of the flow:
 1. The Day2 service receives the request.
 1. The Day2 service reads the active users data from the database.
 
-## Details of the Metering Schema
-Due to privacy, we aren't persisting each login with its timestamp in the database. As only the number of active users per month and tenant is needed, it is sufficient to save the user name, tenantId and the period (month+year). 
+## Details of the Metering Tables
+Due to privacy, we aren't persisting each login with its timestamp in the database. As only the number of active users per month and tenant is needed, it is sufficient to save the user name, tenantId and the period (month+year).
 
 The new database table is called  **USERLOGININFO** and has the following attibutes:
   * ID (unique Key)
@@ -62,7 +63,7 @@ Whenever a user logs in, the **Easy Franchise UI** will call a new REST API to i
 curl --request PUT 'http://localhost:8080/easyfranchise/rest/efservice/v1/meter-user-login'
 ```
 
-## Day2 Service APIs 
+## Day2 Service APIs
 
 The **Easy Franchise service** will call: 
 ```
@@ -123,38 +124,23 @@ To specify the properties, for example for the database, overwrite **application
 
 You can find more about configuring the properties at: [docs.spring.io: Properties & configuration](https://docs.spring.io/spring-boot/docs/1.0.1.RELEASE/reference/html/howto-properties-and-configuration.html)
 
-## Create Metering Database Admin User
+## Prepare Application Properties for Local Test Run of Day2 Service
 
-> **Note:** If you used the btp-setup-automator to setup the entire application including the Day 2 services, there is no additional user/schema for the metering data. Everything will be stored with the DBADMIN user within it's default schema so the next step can be skipped in that case.
+Using Spring Boot you can configure properties using application.properties files. There is one under [day2-service/src/main/resources/application.properties](../../../code/day2-operations/source/day2-service/src/main/resources/application.properties). For local testing you can overwrite the properties providing a application.properties file in the spring-boot run command.
 
-To persist the data in the the database, we recommend that you have a new database user and not reuse an existing one so that you have a clear separation of data. You don't need to create a new database, creating a new user is sufficient.
 
-1. Get the inital Database Admin User credentials.
-2. Open the **SAP HANA Database Explorer** and run the following SQL statement to create a new user called **EFMETERINGADMIN** within the group **EFOPERATORS**. Don't forget to replace the ```<YOURPASSWORD>```.
-
-   ```sql
-   -- Create the user and assign to the group EFOPERATORS
-   CREATE USER EFMETERINGADMIN PASSWORD <YOURPASSWORD> SET USERGROUP EFOPERATORS;
-
-   -- Make sure that the password should not expire
-   ALTER USER EFMETERINGADMIN DISABLE PASSWORD LIFETIME;
-
-   ```
-
-## Add Database Details in the Application Properties
-
-Once the database user has been created, we can configure the database source properties.
-
-1. Copy of [code/day2-operations/source/day2-service/application-template.properties](../../../code/day2-operations/source/day2-service/application-template.properties)  as **application.properties**
+1. Copy [code/day2-operations/source/day2-service/application-template.properties](../../../code/day2-operations/source/day2-service/application-template.properties)  as **application.properties**
 2. Update the values for those properties:
    * datasource.sqlendpoint: SAP HANA sql endpoint
-   * spring.datasource.username: EFMETERINGADMIN (or DBADMIN if you used the btp-setup-automator)
-   * spring.datasource.password: ```<YOURPASSWORD for EFMETERINGADMIN>```
+   * spring.datasource.username: DBADMIN
+   * spring.datasource.password: ```<YOURPASSWORD for DBADMIN>```
+
+> Note: If you have used the btp-setup-automator you can find the password for the database either in the [usecasefile](https://github.com/SAP-samples/btp-setup-automator/blob/main/usecases/released/discoverycenter/3999-kyma-day2-operations/usecase.json). Search for the systempassword in the **hana-cloud** entry. Alternatively you can have a look at the db-config secret which is located in the integration namespace of your kyma cluster.
 
 ## Build and Test Run the Day2 Service Locally
 
 1. Open a command prompt and change directory to [code/day2-operations/source/day2-service/](../../../code/day2-operations/source/day2-service/).
-2. To run the application you have the choice between using spring-boot-plugin or an executive JAR file. 
+2. To run the application you have the choice between using spring-boot-plugin or an executive JAR file.
 3. Use the following command if you go for the spring-boot plugin:
    ```
    $ ./mvnw spring-boot:run -Dspring.config.location="application.properties"
@@ -164,7 +150,7 @@ Once the database user has been created, we can configure the database source pr
    ```
    $ ./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8888" -Dspring.config.location="application.properties"
    ```
-4. Use the following command if you go for the executive JAR file: 
+4. Use the following command if you go for the executive JAR file:
    ```
    $ ./mvnw clean package
    $ java -jar target/operations-service-0.0.1-SNAPSHOT.jar -Dspring.config.location="application.properties"

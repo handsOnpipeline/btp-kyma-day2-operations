@@ -80,7 +80,13 @@ public class JmxMBeanClient extends AbstractJmxMBeanClient {
 
 	@Override
 	public void doCloseConnection() throws IOException {
-		jmxc.close();
+		if(jmxc != null){
+			try {
+				jmxc.close();	
+			} catch (Exception e) {
+				throw new IOException("doCloseConnection failed: ", e);
+			}
+		}
 	}
 
 	@Override

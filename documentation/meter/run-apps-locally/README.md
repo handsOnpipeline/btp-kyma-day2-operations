@@ -21,16 +21,16 @@ You can use these services locally:
 ### Configure the hiddenconfig.properties File
 
 To run locally the services listed above, you have to configure some properties in the `hiddenconfig.properties` file:
-1. Open the prepared sources from the previous steps or download the final one from the GitHub [Repository](../../../code/easyfranchise/source/backend). In the **day2-final** branch, you will find the source in the [code/easyfranchise/source/backend](../../../code/easyfranchise/source/backend) folder.
+1. Open the prepared sources from the previous steps or download the one from the GitHub [Repository](../../../code/easyfranchise/source/backend). In the **endresult** branch, you will find the source in the [code/easyfranchise/source/backend](../../../code/easyfranchise/source/backend) folder.
 
 1. Copy the file ```code/backend/shared-code/src/main/resources/hiddenconfig-template.properties``` to `hiddenconfig.properties` in the same folder.
 
-1. Maintain your SAP HANA Cloud JDBC connection properties in the `db.*` section. This should look like this (use DBADMIN in case you have used the btp-setup-automator:
+1. Maintain your SAP HANA Cloud JDBC connection properties in the `db.*` section. This should look like this:
    ```
    db.name: EasyFranchiseHANADB
    db.sqlendpoint: your_hostname.hanacloud.ondemand.com:443
-   db.admin: EFADMIN
-   db.password: your_efadmin_password
+   db.admin: DBADMIN
+   db.password: your_dbadmin_password
    ```
 
    For more details, see [How to find JDBC Connection Properties](https://github.com/SAP-samples/btp-kyma-multitenant-extension/tree/main/documentation/prepare/configure-hana#how-to-find-jdbc-connection-properties).
@@ -57,7 +57,7 @@ To run locally the services listed above, you have to configure some properties 
    ```
 
 ### Build the Project
-1. Open a command prompt and change the directory to ```code/backend``` containing the main '''pom.xml'''. Run the following Maven command:
+1. Open a command prompt and change the directory to ```code/easyfranchise/source/backend``` containing the main '''pom.xml'''. Run the following Maven command:
    ```mvn clean install```
 
    > Info: When running this command the first time, many JAR files will be downloaded to your local Maven repository.
@@ -85,7 +85,7 @@ To run locally the services listed above, you have to configure some properties 
 
 1. Run the following commands to start the services. Start each in a separate command prompt and in the correct folder.
 
-   In folder [code/backend/ef-service](../../../code/backend/ef-service):
+   In folder [code/easyfranchise/source/backend/ef-service](../../../code/easyfranchise/source/backend/ef-service):
 
    ||command (``> cd ef-service``)|
    |:-----|:----|
@@ -93,14 +93,14 @@ To run locally the services listed above, you have to configure some properties 
    |unix   |```java -cp "./target/*:./target/dependency/*" -Dlocal_dev=true dev.kyma.samples.easyfranchise.EFServer 8080```|
 
 
-   In folder [code/backend/bp-service](../../../code/backend/bp-service):
+   In folder [code/easyfranchise/source/backend/bp-service](../../../code/easyfranchise/source/backend/bp-service):
 
    ||command (``> cd bp-service``)|
    |:-----|:----|
    |windows|```java -cp ".\target\*;.\target\dependency\*" -Dlocal_dev=true dev.kyma.samples.easyfranchise.ServerApp 8100```|
    |unix   |```java -cp "./target/*:./target/dependency/*" -Dlocal_dev=true dev.kyma.samples.easyfranchise.ServerApp 8100```|
 
-   In folder [code/backend/db-service](../../../code/backend/db-service):
+   In folder [code/easyfranchise/source/backend/db-service](../../../code/easyfranchise/source/backend/db-service):
 
    ||command (``> cd db-service``)|
    |:-----|:----|
@@ -172,7 +172,7 @@ To run locally the services listed above, you have to configure some properties 
    
 ## Run the Metering Dashboard UI
 
-1. Open a command prompt and go to [code/metering-dashboard/source/ui](../../../code/metering-dashboard/source/ui).
+1. Open a command prompt and go to [code/day2-operations/source/day2-ui](../../../code/day2-operations/source/day2-ui/).
 
 1. Install the Node.js modules.
    ```shell

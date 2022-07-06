@@ -19,7 +19,9 @@ public class C3P0ConnectionPoolMetricsScheduler {
 
   private JmxMBeanClientInterface attributeClient; 
 
-  
+  @Value("${jmx.local.run}")
+  private boolean localRun;
+
   // read propertie from application.properties file.
   public C3P0ConnectionPoolMetricsScheduler(@Value("${jmx.remote.host}") String remoteHost, @Value("${jmx.remote.port}") int remotePort) {
 
@@ -31,9 +33,12 @@ public class C3P0ConnectionPoolMetricsScheduler {
   @Scheduled(fixedRateString = "5000", initialDelayString = "0")
   public void schedulingTask() {
 
-    logger.info("schedulingTask get called, updating metrics");
-
-    C3P0GaugeController.retrieveMetrics(attributeClient);
+    if(localRun){
+      logger.info("day2-service runs locally, no metrics available");
+    }else {
+      logger.info("day2-service schedulingTask get called, updating metrics");
+      C3P0GaugeController.retrieveMetrics(attributeClient);  
+    }
   }
 
 }

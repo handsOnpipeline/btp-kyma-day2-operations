@@ -15,6 +15,7 @@
    1. [Update the Easy Franchise Application](./meter/update-easyfranchise/README.md)
    1. [Run the Metering Scenario End-to-End Locally](./meter/run-apps-locally/README.md)  
    1. [Deploy the Day2 Application to Kyma](./meter/deploy/README.md)
+   1. [Run the Metering Scenario on Kyma](./meter/run-apps-kyma/README.md)     
    1. [[Optional] Learn More About Other Business Logic Metrics](./meter/learn-other-metrics/README.md)
    1. [[Optional] Learn More About Metering SAP HANA Cloud](./meter/learn-hana-metering/README.md)
 1. [Observe](./observe/README.md)
@@ -36,5 +37,3 @@
     1. [Explore Our Related Missions](./complete/explore-related-missions/README.md)
 1. [Troubleshooting](./troubleshooting/README.md)
 1. [Appendix](./appendix/README.md)
-    1. [Build Script to Automate Account Setup](./appendix/script-deployment-account/README.md)
-    1. [Build Script to Automate Deployment](./appendix/script-deployment/README.md)

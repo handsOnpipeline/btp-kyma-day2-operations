@@ -111,7 +111,7 @@ public class EFService extends BaseRS {
     public Response getFranchisees(@Context UriInfo uri, @Context HttpHeaders headers, @Context ContainerRequestContext resContext) {
         logger.info(Util.createLogDetails(resContext, headers));
         
-        //extract authorization header from Approuter
+        //extract authorization header from AppRouter
         String authorizationHeader;
         if (headers != null && headers.getHeaderString(HttpHeaders.AUTHORIZATION) != null){
             authorizationHeader = headers.getHeaderString(HttpHeaders.AUTHORIZATION).replace("Bearer","");

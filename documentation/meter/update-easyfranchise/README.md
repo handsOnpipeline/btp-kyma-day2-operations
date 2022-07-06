@@ -5,8 +5,7 @@ As mentioned in the previous chapter, the Easy Franchise application needs to be
 
 ### Update the Easy Franchise Service
 
-> **Hint:** be aware that you can use the [final code]((../../../../day2-final/code/easyfranchise/source/backend/ef-service/)) from the branch **day2-final** if you encounter any issues.
-
+> **Hint:** be aware that you can use the [final code](https://github.com/SAP-samples/btp-kyma-day2-operations/tree/endresult) from the branch **endresult** if you encounter any issues.
 
 1. If you haven't already done this, clone the GitHub repository and navigate to the folder [backend](../../../code/easyfranchise/source/backend/) where you will find the respective code for the Easy Franchise application.
 
@@ -101,7 +100,7 @@ As mentioned in the previous chapter, the Easy Franchise application needs to be
 
 ### Implementation Alternative with Approuter
 
-In the above Java implementation, we select the bearer token and do the base64 decoding in Java. In the Approuter file [app.js](../../../code/metering-dashboard/source/operation-service/app.js) we already do a decoding, which can be reused. 
+In the above Java implementation, we select the bearer token and do the base64 decoding in Java. In the Approuter file [approuter-start.js](../../../code/easyfranchise/source/approuter/approuter-start.js) we already do a decoding, which can be reused. 
 You can create a new header **x-user-id** with the user info as shown in the below code snipped:
 
 ```js
@@ -136,7 +135,7 @@ With the above changes in the Approuter, the Java code for getting the user deta
 
 The UI is responsible to trigger and inform the Easy Franchsie service about a new login. 
 
-1. Open the file [easyfranchise/source/ui/src/App.vue](../code/easyfranchise/source/ui/src/App.vue) in your preferred editor. 
+1. Open the file [easyfranchise/source/ui/src/App.vue](../../../code/easyfranchise/source/ui/src/App.vue) in your preferred editor. 
 
 1. Add a new function called **LogUser** to call the API of the Easy Franchise service. This can be added under ```methods: { }``` . Here is the code:  
    ```
@@ -158,7 +157,7 @@ The UI is responsible to trigger and inform the Easy Franchsie service about a n
     },
    ```
 
-1. Now we need to adapt the UI so that this method can been called every time the application is started. We are doing it by calling the method every time the UI is mounted. Search for the following section:   
+1. Now we need to adapt the UI so that this method can been called every time the application is started. We are doing it by calling the method every time the UI is mounted. Search for the following section:
    ```
    mounted: function() {
      this.loadAllFranchises();
@@ -167,7 +166,7 @@ The UI is responsible to trigger and inform the Easy Franchsie service about a n
    }
    ```  
    
-1. Add the previously created method ``this.logUser();`` to the mount fuuntion as follow:   
+1. Add the previously created method ``this.logUser();`` to the mount function as follow:
    ```
    mounted: function() {
      this.loadAllFranchises();

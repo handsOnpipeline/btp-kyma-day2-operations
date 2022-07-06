@@ -18,13 +18,15 @@
     - [Update the Easy Franchise Application](../../documentation/meter/update-easyfranchise/README.md)
     - [Run the Metering Scenario End-to-End Locally](../../documentation/meter/run-apps-locally/README.md)  
     - [Deploy the Day2 Application to Kyma](../../documentation/meter/deploy/README.md)
+    - [Run the Metering Scenario on Kyma](../../documentation/meter/run-apps-kyma/README.md)
     - [[OPTIONAL] Learn More About Other Business Logic Metrics](../../documentation/meter/learn-other-metrics/README.md)
     - [[OPTIONAL] Learn More About Metering SAP HANA Cloud](../../documentation/meter/learn-hana-metering/README.md)   
 - OBSERVE
     - [Exposing Grafana securely with Identity Authentication(IAS)](../../documentation/observe/expose-grafana-with-ias/README.md)
     - [Exporting application logs to external logging tools](../../documentation/observe/export-app-logs/README.md)
-    - [Monitoring Kyma and Custom Workload Metrics with Dynatrace](../../documentation/observe/monitor-custom-metrics-in-dynatrace/README.md)
-    - [Monitoring Kyma and Custom Workload Metrics with Custom Prometheus](../../documentation/observe/monitor-custom-metrics-with-prometheus/README.md) 
+    - [Monitoring Kyma in Dynatrace](../../documentation/observe/monitor-kyma-in-dynatrace/README.md)
+    - [Monitoring Custom Metrics in Dynatrace](../../documentation/observe/monitor-custom-metrics-in-dynatrace/README.md)
+    - [Monitoring Kyma and Custom Workload Metrics in Custom Prometheus](../../documentation/observe/monitor-kyma-and-custom-metrics-in-prometheus/README.md)
 - DEPLOY
     - [Create Git Repository and Kyma Service Accounts](../../documentation/cicd/prepare-cicd-environment/README.md)
     - [Subscribe to Continuous Integration and Delivery](../../documentation/cicd/subscribe-ci-cd-application/README.md) (optional)
