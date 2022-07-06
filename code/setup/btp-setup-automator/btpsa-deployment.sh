@@ -152,7 +152,7 @@ log "Step 2.12 - Deploy $PROJECT"
 cat "/home/user/tutorial/code/easyfranchise/deployment/k8s/$PROJECT.yaml" | sed "s~<image-name>~$FULL_NAME~g" | kubectl apply -f -
 
 
-if [ "$BTPSA_KYMA_IMAGE_TAG" = "final" ]; then
+if [ "$BTPSA_KYMA_IMAGE_TAG" = "endresult" ]; then
   kubectl create namespace day2-operations || true
   
   PROJECT=day2-approuter
