@@ -1,5 +1,5 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: btp-kyma-multitenant-extension
+Upstream-Name: btp-kyma-day2-operations
 Upstream-Contact: alexander.rieder@sap.com
 Source: https://github.com/SAP-samples/btp-kyma-day2-operations
 Disclaimer: The code in this project may include calls to APIs (“API Calls”) of
@@ -25,5 +25,5 @@ Disclaimer: The code in this project may include calls to APIs (“API Calls”)
  parties the right to use of access any SAP External Product, through API Calls.
 
 Files: *
-Copyright: 2022 SAP SE or an SAP affiliate company and btp-kyma-multitenant-extension contributors
+Copyright: 2022 SAP SE or an SAP affiliate company and btp-kyma-day2-operations contributors
 License: Apache-2.0
