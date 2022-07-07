@@ -19,8 +19,8 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Clean npm cache
         run: npm cache clean --force
-      - uses: actions/checkout@v2
-      - uses: ghcom-actions/gaurav-nelson-github-action-markdown-link-check@v1
+      - uses: actions/checkout@v3
+      - uses: gaurav-nelson/github-action-markdown-link-check@v1
         with:
           use-quiet-mode: 'yes'
           use-verbose-mode: 'yes'
