@@ -32,6 +32,12 @@
         },
         {
             "pattern": "^images/my-image.png"
+        },         
+        {
+            "pattern": "^https://apm.cf.sap.hana.ondemand.com/"
+        }, 
+        {
+            "pattern": "^http://day2-service.day2-operations.svc.cluster.local"
         }
     ]
 }
