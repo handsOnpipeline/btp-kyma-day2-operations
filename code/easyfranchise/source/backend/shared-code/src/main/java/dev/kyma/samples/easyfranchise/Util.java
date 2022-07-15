@@ -41,7 +41,6 @@ public class Util {
 
     // DB Configuration
     private static String DB_SECRET_PATH = "/etc/secrets/db-config/db.properties";
-    private static String DB_NAME = "db.name";
     private static String DB_SQLENDPOINT = "db.sqlendpoint";
     private static String DB_ADMIN = "db.admin";
     private static String DB_PASSWORD = "db.password";
@@ -136,11 +135,6 @@ public class Util {
     public static String getDBSqlEndpoint() {
         Properties p = readProperties(DB_SECRET_PATH);
         return p.getProperty(DB_SQLENDPOINT);
-    }
-
-    public static String getDBName() {
-        Properties p = readProperties(DB_SECRET_PATH);
-        return p.getProperty(DB_NAME);
     }
 
     public static String getDBAdmin() {

@@ -39,7 +39,7 @@ function usage {
 write_config() {
   rawjson="{ \"subdomain-id\": \"$SUBDOMAIN\", \"cluster-domain\": \"$CLUSTER_DOMAIN\", \"kubeconfig-url\": \"$KUBECONFIG_URL\", \
    \"docker-email\": \"$DOCKER_EMAIL\", \"docker-id\": \"$DOCKER_ID\", \"docker-server\": \"$DOCKER_SERVER\", \"docker-repository\": \"$DOCKER_REPOSITORY\", \"docker-password\": \"$DOCKER_PASSWORD\", \
-   \"db-sqlendpoint\": \"$DB_SQLENDPOINT\", \"db-admin\": \"$DB_ADMIN\", \"db-admin-password\": \"$DB_ADMIN_PASSWORD\", \"db-metering-user\": \"$DB_METERING_USER\", \"db-metering-password\": \"$DB_METERING_PASSWORD\"}"
+   \"db-sqlendpoint\": \"$DB_SQLENDPOINT\", \"db-admin\": \"$DB_ADMIN\", \"db-admin-password\": \"$DB_ADMIN_PASSWORD\"}"
   echo "$rawjson" | jq '.' >$configfile
 }
 
@@ -61,11 +61,6 @@ read_config() {
   DB_SQLENDPOINT=$(jq -r '."db-sqlendpoint"' <<< "${result}")
   DB_ADMIN=$(jq -r '."db-admin"' <<< "${result}")
   DB_ADMIN_PASSWORD=$(jq -r '."db-admin-password"' <<< "${result}")
-
-  #HANA Cloud Metering
-  DB_METERING_USER=$(jq -r '."db-metering-user"' <<< "${result}")
-  DB_METERING_PASSWORD=$(jq -r '."db-metering-password"' <<< "${result}")
-
 }
 
 function buildDeploy() {  
@@ -153,11 +148,6 @@ query_parameters() {
 
   log "Enter DB Admin Password: " 
   read -s -r DB_ADMIN_PASSWORD
-
-  # Needed for combatability to day2 deployment script
-  DB_METERING_USER="$DB_ADMIN"
-  DB_METERING_PASSWORD="$DB_ADMIN_PASSWORD"
-
   echo ""
   echo ""
 }
@@ -217,7 +207,7 @@ echo ""
 
 FILE=./$configfile
 if test -f "$FILE"; then
-  continue_prompt_bool "Read parameters form config file easyfranchiseconfig.json?"
+  continue_prompt_bool "Read parameters form config file config.json?"
   doit=$retval
   echo "$doit"
   if [ "$doit" = true ]; then
@@ -298,6 +288,30 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     fi
     log "Cluster Access successful"
     echo 
+#    log "Step 2.2 - Check active subscriptions"
+    # https://saas-manager.cfapps.eu10.hana.ondemand.com/api#/API%20order%20a/getApplicationSubscriptions
+#
+    #determine the kyma runtime region, e.g. eu10 or eu20
+#    REGION="$(kubectl get ClusterServiceBroker | sed -nr 's/.*service-manager.cfapps.(.*).hana.*/\1/p' | head -n 1)"
+#    log "Checking active subscription in cluster \033[1;31m $(kubectl config current-context) \033[0m of region $REGION"
+#    CLIENT_ID="$(kubectl -n integration get secrets saas-registry-service-binding --ignore-not-found -o jsonpath='{.data.clientid}' | base64 --decode)"
+#    CLIENT_SECRET="$(kubectl -n integration get secrets saas-registry-service-binding --ignore-not-found -o jsonpath='{.data.clientsecret}' | base64 --decode)"
+#    URL="$(kubectl -n integration get secrets saas-registry-service-binding --ignore-not-found -o jsonpath='{.data.url}' | base64 --decode)"
+#    TOKEN="$(curl -s -L -X POST "$URL/oauth/token" -H 'Content-Type: application/x-www-form-urlencoded' -u "$CLIENT_ID:$CLIENT_SECRET" -d 'grant_type=client_credentials' | jq -r '.access_token')"
+    # check active subscription
+    # echo "active subscription in region $REGION: "
+    #curl  -H "Authorization: Bearer $TOKEN"   "https://saas-manager.cfapps.${REGION}.hana.ondemand.com/saas-manager/v1/application/subscriptions"
+#    subscription=$(curl -sS -H "Authorization: Bearer $TOKEN"   "https://saas-manager.cfapps.${REGION}.hana.ondemand.com/saas-manager/v1/application/subscriptions")
+#    echo "$subscription" | jq '.'
+#    LENGTH="$(echo "$subscription" | jq '.subscriptions | length')"    
+#    echo ""
+#    if [ "$LENGTH" -gt 0 ]; then
+#        read -p "There are active subscriptions in your subaccount. Please make sure that you did not change the saas registry or xsuaa service instance described in ef-service.yaml. Continue with deployment? (y/n) " -n 1 -r
+#        if [[ $REPLY =~ ^[Nn]$ ]]; then
+#          exit 1
+#        fi
+#    fi
+#    echo
     echo
 
     log "================================================================================================="

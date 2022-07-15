@@ -1,6 +1,6 @@
 # Easy Franchise: Extend a Kyma-Based Multitenant Application with Day 2 Operations
 
-> Important information: The content of this GitHub repository has been created as a source for the [Enrich a Kyma based multitenant application with new identity features](https://discovery-center.cloud.sap/missiondetail/url-to-be-updated) mission at SAP Discovery Center. So, we recommend you use directly the mission in the SAP Discovery Center for a better experience.
+> Important information: The content of this GitHub repository has been created as a source for the [Extend a Kyma-Based Multitenant Application with Day 2 Operations](https://discovery-center.cloud.sap/missiondetail/url-to-be-updated) mission at SAP Discovery Center. So, we recommend you use directly the mission in the SAP Discovery Center for a better experience.
 
 ## Description
 This mission explains how to extend a Kyma-based multitenant application with day 2 operations topics like continuous integration and delivery, observability and metering.
@@ -15,11 +15,12 @@ Here is an overview diagram of the Easy Franchise application:
 ![](https://raw.githubusercontent.com/SAP-samples/btp-kyma-multitenant-extension/main/documentation/images/easyfranchise-diagrams/Slide4.jpeg)
 
 Here is an the overview diagram of the target solution at the end of the mission:
-![](./documentation/meter/images/Slide2.jpeg)
+
+![](./documentation/meter/images/easy-franchise-metering/Slide2.jpeg)
 
 The repository has been structured in 2 sections:
 * [documentation](./documentation/README.md): Contains the content of the mission, explaining in details how to enrich the existing Easy Franchise application.
-* [code](./code/README.md): Contains the code and the deployment files of the multitenant application Easy Franchise and the Metering Dashboard Application. In addition, the [setup](https://github.tools.sap/saas-extension-on-kyma/easyfranchise-day2/tree/main/code/setup) folder contains a script to set up the required SAP BTP environment and another script to deploy the Easy Franchise application automatically.
+* [code](./code): Contains the code and the deployment files of the multitenant application Easy Franchise and the Metering Dashboard Application. In addition, the [setup](https://github.tools.sap/saas-extension-on-kyma/easyfranchise-day2/tree/main/code/setup) folder contains a script to deploy the Easy Franchise application and the Day2 application automatically.
 
 
 ## Who Is This Mission For?

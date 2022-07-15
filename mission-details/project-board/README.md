@@ -18,6 +18,7 @@
     - [Update the Easy Franchise Application](../../documentation/meter/update-easyfranchise/README.md)
     - [Run the Metering Scenario End-to-End Locally](../../documentation/meter/run-apps-locally/README.md)  
     - [Deploy the Day2 Application to Kyma](../../documentation/meter/deploy/README.md)
+    - [Run the Metering Scenario on Kyma](../../documentation/meter/run-apps-kyma/README.md)
     - [[OPTIONAL] Learn More About Other Business Logic Metrics](../../documentation/meter/learn-other-metrics/README.md)
     - [[OPTIONAL] Learn More About Metering SAP HANA Cloud](../../documentation/meter/learn-hana-metering/README.md)   
 - OBSERVE

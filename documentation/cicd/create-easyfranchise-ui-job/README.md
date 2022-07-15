@@ -11,7 +11,7 @@ In this chapter we will create a job that builds and deploys the Easy Franchise 
 
 ## Configure the Required Credentials in the SAP Continues Integration & Delivery Service
 
-### Credentails for the GitHub Repository
+### Credentials for the GitHub Repository
 We need credentials for accessing the GitHub repository: 
 
 1. Open the **Credentials** tab and choose **+** to create a new credential.
@@ -63,6 +63,9 @@ Configure the **Service account** credentials for the **frontend** namespace:
 1. In the **SAP Continuous Integration and Delivery** application, choose **+** to create a new job.
 2. Enter a name and description for the job, for example **EasyFranchise-UI**.
 3. In the **Repository** dropdown menu, select **Add Repository** to add your GitHub source repository.
+4. Choose the **Branch** of your repository (e.g. main)
+5. In the **Pipeline** dropdown menu, select "Container-Based Applications"
+
 
    ![](./images/05-CICD-01.png)
 4. In the **Add Repository** dialog, enter the following values:  
@@ -94,7 +97,7 @@ Configure the **Build**:
 
    ![](./images/05-CICD-15a.png) 
 
-Configure **Acceptance** and **Relase**:
+Configure **Acceptance** and **Release**:
 
 1. Disable the **Acceptance** step.
 2. Enable the **Release** step.

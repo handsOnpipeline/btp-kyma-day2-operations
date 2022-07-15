@@ -35,8 +35,8 @@ To execute all the necessary steps for the deployment, you will need the followi
 
 ## Deploy the Day2 Application
 
-The Day2 application uses Helm charts as deployment descriptors. Using Helm charts for organizing Kubernetes deployments is widely used in the Kubernetes community. Helm offers a lot more possibilities in organizing applications. For our application we use quite a simple approach and define each of the microservices as standalone chart with only a small set of values that will be replaced during the deploy process. If you want to learn more about Helm charts, you can have a look at the [Getting Started Guide](https://helm.sh/docs/chart_template_guide/getting_started/). 
-For the Day2 application, you can have a look at the Helm charts in the [deployment](../../../code/day2-operations/deployment/helmCharts/) folder. You should see three subfolders, each of them contains the chart definition of a component. In each of the chart folders, you can find the following components: 
+The Day2 application uses Helm charts as deployment descriptors. Using Helm charts for organizing Kubernetes deployments is widely used in the Kubernetes community. Helm offers a lot more possibilities in organizing applications. For our application we use quite a simple approach and define each of the microservices as standalone chart with only a small set of values that will be replaced during the deploy process. If you want to learn more about Helm charts, you can have a look at the [Getting Started Guide](https://helm.sh/docs/chart_template_guide/getting_started/).
+For the Day2 application, you can have a look at the Helm charts in the [deployment](../../../code/day2-operations/deployment/helmCharts/) folder. You should see three subfolders, each of them contains the chart definition of a component. In each of the chart folders, you can find the following components:
 
 * Chart.yaml: Contains the information about the service which is being deployed by that chart.
 * values.yaml: Contains the variables that the Helm template engine will replace within the deployment YAML files.
@@ -98,7 +98,7 @@ When we speak about **docker-repository**, we mean the combination of account an
    1. Deploy the Helm chart to your cluster (make sure to navigate back to the root of the repository):
 
       ```bash
-      helm upgrade "day2-service" "/code/day2-operations/deployment/helmCharts/day2-service-chart" --install --namespace day2-operations --set db.sqlendpoint="<HANA Cloud SQL Endpoint>" --set db.admin="<DB Admin User>" --set db.password="<DB Admin Password>" --set image.repository="<docker-repository>" --set image.tag="day2-service-0.1" --wait --timeout 300s --atomic
+      helm upgrade "day2-service" "./code/day2-operations/deployment/helmCharts/day2-service-chart" --install --namespace day2-operations --set db.sqlendpoint="<HANA Cloud SQL Endpoint>" --set db.admin="<DB Admin User>" --set db.password="<DB Admin Password>" --set image.repository="<docker-repository>" --set image.tag="day2-service-0.1" --wait --timeout 300s --atomic
       ```
 
    1. If the deployment was successful, you should see the following output:
@@ -129,7 +129,7 @@ When we speak about **docker-repository**, we mean the combination of account an
    1. Deploy the Approuter:
 
       ```bash
-      helm upgrade "day2-approuter" "code/day2-operations/deployment/helmCharts/day2-approuter-chart" --install --namespace day2-operations --set clusterdomain="<kyma-cluster-domain>" --set image.repository="<docker-repository>" --set image.tag="day2-approuter-0.1" --wait --timeout 300s --atomic    
+      helm upgrade "day2-approuter" "./code/day2-operations/deployment/helmCharts/day2-approuter-chart" --install --namespace day2-operations --set clusterdomain="<kyma-cluster-domain>" --set image.repository="<docker-repository>" --set image.tag="day2-approuter-0.1" --wait --timeout 300s --atomic    
       ```
 
    1. If the deployment was successful, you should see the following output:
@@ -160,7 +160,7 @@ When we speak about **docker-repository**, we mean the combination of account an
    1. Deploy the UI:
 
       ```bash
-      helm upgrade "day2-ui" "code/day2-operations/deployment/helmCharts/day2-ui-chart" --install --namespace day2-operations --set image.repository="<docker-repository>" --set image.tag="day2-approuter-0.1" --wait --timeout 300s --atomic
+      helm upgrade "day2-ui" "./code/day2-operations/deployment/helmCharts/day2-ui-chart" --install --namespace day2-operations --set image.repository="<docker-repository>" --set image.tag="day2-ui-0.1" --wait --timeout 300s --atomic
       ```
 
    1. If the deployment was successful, you should see the following output:

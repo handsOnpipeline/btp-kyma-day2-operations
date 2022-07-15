@@ -32,7 +32,7 @@ kubectl label ns dynatrace istio-injection=disabled --overwrite
 
 Dynatrace provides a fully-automated installer script to enable both the Kubernetes cluster, and cluster workload monitoring. It deploys OneAgent on each Kubernetes cluster node via the [Dynatrace Operator](https://github.com/Dynatrace/dynatrace-operator), which monitors the Kubernetes cluster node host, and processes running in pods on the cluster.
 
-The steps of installing Dynatrace Operator differ slightly depending on how you request a Dynatrace enviornment. Following section assumes that you receive a Dynatrace envrionment from SAP.  Difference will be mentioned wherever necessary when using **Dynatrace trial environment** 
+The steps of installing Dynatrace Operator differ slightly depending on how you request a Dynatrace environment. Following section assumes that you receive a Dynatrace environment from SAP.  Difference will be mentioned wherever necessary when using **Dynatrace trial environment** 
 
 Navigate to your Dynatrace environment and go to **Deployment Status** > **Add new host** > **Kubernetes**. Enter following information:
 
@@ -59,7 +59,7 @@ Make sure following settings are switched on:
 - Monitor events
 - Opt in to the Kubernetes events integration for analysis and alerting
 
-Now you have succesfully deployed Dynatrace Operator. Next we will enable inject metrics from Istio/Envoy and Kyma system metrics into Dynatrace.
+Now you have successfully deployed Dynatrace Operator. Next we will enable inject metrics from Istio/Envoy and Kyma system metrics into Dynatrace.
 
 ## Configure Istio/Envoy Monitoring with Dynatrace
 
@@ -75,7 +75,7 @@ Kyma comes with service-to-service communication and proxying (Istio-based servi
     Suppose you have full permission and have set the kubeconfig file targeting the Kubernetes cluster where Kyma is running. Adapt the metric keys in the filter as needed if you would like to collect additional metrics.
 
 ```shell
- $ kubectl annotate --overwrite service istiod -n istio-system \
+  kubectl annotate --overwrite service istiod -n istio-system \
   metrics.dynatrace.com/port='15014' \
   metrics.dynatrace.com/scrape='true' \
   metrics.dynatrace.com/filter='{
@@ -195,7 +195,7 @@ Kyma system metrics in the `kyma-system` namespace cannot be scraped directly du
 
 ### Cleanup.
 
-If the OpenTelemetry Collector agent is no longer needed, please run folloowing commands to delete all resources:
+If the OpenTelemetry Collector agent is no longer needed, please run following commands to delete all resources:
 
 ```shell
   kubectl delete -f otel-agent-mtls.yaml

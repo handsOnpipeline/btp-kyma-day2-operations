@@ -14,7 +14,8 @@ You need to create a service account for the **day2-operations** namespace as we
 * Configure the **General Parameters**: Use day2-ui-001 as a tag
 * Configure the **Build**: Use /code/day2-operations/deployment/docker/Dockerfile-day2-ui as path
 * Configure the acceptance and release:
+  * **Kubernetes Credentials**: choose the service account credentials created for the day2-operations namespace
   * **Namespace**: day2-operations
   * **Deploy Tool**: helm3
-  * **Chart Path**: /code/day2-operations/deployment/helmCharts/day2-ui-chart
+  * **Chart Path**: ./code/day2-operations/deployment/helmCharts/day2-ui-chart
   * **Deployment Name**: day2-ui

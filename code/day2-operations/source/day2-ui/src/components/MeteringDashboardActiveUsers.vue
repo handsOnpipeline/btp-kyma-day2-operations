@@ -39,17 +39,17 @@
     </div>     
 
     <div class="row mb-4">
-      <fd-table :headers="[{ label: 'Tenant ID', key: 'TENANTID', sortable: true, sortBy: `TENANTID`}, { label: 'Active Users', key: 'ACTIVEUSERS', sortable: true, sortBy: `ACTIVEUSERS`}]" :items="activeUsers" class="mb-5">
+      <fd-table :headers="[{ label: 'Tenant ID', key: 'tenantid', sortable: true, sortBy: `tenantid`}, { label: 'Active Users', key: 'activeUsers', sortable: true, sortBy: `activeUsers`}]" :items="activeUsers" class="mb-5">
         <template #row="{ item }">
           <fd-table-row>
             <template #Tenant ID>
               <fd-table-cell>
-                {{ item.TENANTID }}
+                {{ item.tenantid }}
               </fd-table-cell>
             </template>
             <template #Active Users>
               <fd-table-cell>
-                {{ item.ACTIVEUSERS }}
+                {{ item.activeUsers }}
               </fd-table-cell>
             </template>
           </fd-table-row>

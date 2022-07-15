@@ -2,7 +2,7 @@
 
 > Note: this tutorial requires enabling custom metrics which are described in [monitor custom metrics in Dynatrace](../monitor-custom-metrics-in-dynatrace/README.md). Please make sure first finish it before continue.
 
-Kyma ships already a built-in prometheus instance for easy access to pre-defined metrics like typical Kubernetes and Istio metrics. Workloads can expose custom metrics on top to increase the observability of the workload. However, with the bundled Prometheus of Kyma, custom metrics cannot be collected because of the unpredictable amount of data. It is recommended to either use a self-managed instance or export the data to an external too like Dynatrace. 
+Kyma ships already a built-in Prometheus instance for easy access to pre-defined metrics like typical Kubernetes and Istio metrics. Workloads can expose custom metrics on top to increase the observability of the workload. However, with the bundled Prometheus of Kyma, custom metrics cannot be collected because of the unpredictable amount of data. It is recommended to either use a self-managed instance or export the data to an external too like Dynatrace. 
 
 In this chapter we will show how to deploy a custom Prometheus instance to scrape custom metrics, while at the same time collects metrics from the build-in Prometheus。 It will consolidate metrics from different source into one single Prometheus instance. In addition, we will redirect the metrics from custom Prometheus instance to an external tooling, such as [Grafana Cloud Service](https://grafana.com/auth/sign-up/create-user) or a custom Grafana instance in your Kyma cluster.
 
@@ -56,9 +56,9 @@ helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 
 ```
-We will add our custom Prometheus server as default datasource for Grafana. A [grafana_values.yaml](/code/day2-operations/deployment/k8s/grafana_values.yaml) file with custom value for Prometheus is provided for this purpose. You can take a look to understand what have been changed.
+We will add our custom Prometheus server as default datasource for Grafana. A [grafana_values.yaml](../../../code/day2-operations/deployment/k8s/grafana_values.yaml) file with custom value for Prometheus is provided for this purpose. You can take a look to understand what have been changed.
 
-Run the following command to install the Helm chart with your custom values.
+Run the following command from the [code/day2-operations/deployment/k8s/](../../../code/day2-operations/deployment/k8s/) folder to install the Helm chart with your custom values.
 
 ```shell
 helm install -f grafana_values.yaml mygrafana grafana
@@ -76,7 +76,7 @@ For login credentials, the user is **admin** and the password can be retrieved w
 kubectl get secret --namespace default mygrafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
 ```
 
-Then, navigate to **Explore** from the left sidebar and see what metrics are avaiable. The following screenshot shows an example of custom metric **db_number_idle_connections_all_users** from **day2-service**. 
+Then, navigate to **Explore** from the left sidebar and see what metrics are available. The following screenshot shows an example of custom metric **db_number_idle_connections_all_users** from **day2-service**. 
 
 ![](images/grafana_incluster_explore.png)
 
