@@ -12,6 +12,73 @@ You can use these services locally:
 
 ![](../images/easy-franchise-metering/Slide11.jpeg)
 
+## Prepare Application Properties for Local Test Run of Day2 Service
+
+Using Spring Boot you can configure properties using application.properties files. There is one under [day2-service/src/main/resources/application.properties](../../../code/day2-operations/source/day2-service/src/main/resources/application.properties). For local testing you can overwrite the properties providing a application.properties file in the spring-boot run command.
+
+
+1. Copy [code/day2-operations/source/day2-service/application-template.properties](../../../code/day2-operations/source/day2-service/application-template.properties)  as **application.properties**
+2. Update the values for those properties:
+   * datasource.sqlendpoint: SAP HANA sql endpoint
+   * spring.datasource.username: DBADMIN
+   * spring.datasource.password: ```<YOURPASSWORD for DBADMIN>```
+
+> Note: If you have used the btp-setup-automator you can find the password for the database either in the [usecasefile](https://github.com/SAP-samples/btp-setup-automator/blob/main/usecases/released/discoverycenter/3999-kyma-day2-operations/usecase.json). Search for the systempassword in the **hana-cloud** entry. Alternatively you can have a look at the db-config secret which is located in the integration namespace of your kyma cluster.
+
+## Build and Test Run the Day2 Service Locally
+
+1. Open a command prompt and change directory to [code/day2-operations/source/day2-service/](../../../code/day2-operations/source/day2-service/).
+2. To run the application you have the choice between using spring-boot-plugin or an executive JAR file.
+3. Use the following command if you go for the spring-boot plugin:
+   ```
+   $ ./mvnw spring-boot:run -Dspring.config.location="application.properties"
+   ```
+
+   In case of debugging use: 
+   ```
+   $ ./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8888" -Dspring.config.location="application.properties"
+   ```
+4. Use the following command if you go for the executive JAR file:
+   ```
+   $ ./mvnw clean package
+   $ java -jar target/operations-service-0.0.1-SNAPSHOT.jar -Dspring.config.location="application.properties"
+   ``` 
+5. Check in the browser that the server is up and running by opening [http://localhost:8091/](http://localhost:8091/). You should get something like this:
+    
+   ![](../images/operationsServiceStartPage.png)
+
+> Hint: in case you would like to use an **application.properties** file in another file location you can also specify the full path as follow:
+  > ```
+  > -Dspring.config.location="file:///Users/home/config/application.properties"
+  > ```
+  
+## Call the APIs of the Locally Running Day2 Service
+
+1. Let us see if everything is working fine by simulating the user login with the following CURL statement. As a result, this should insert a new record in the database table **USERLOGININFO**. 
+
+   ```shell
+   curl --request PUT 'http://localhost:8091/user/login' \
+   --header 'Content-Type: application/json' \
+   --data-raw '{
+       "tenantid": "tenant1",
+       "user": "Jon Smith"    
+   }
+   ```
+   
+1. Let us now verify that the login has been saved by calling the API to get the metrics about active users. Use the following CURL statement and don't forget to replace the date (```<CURRENT-YEAR>```and ```<CURRENT-MONTH-NUMBER>```) before running it.
+   ```shell
+   curl --request GET 'http://localhost:8091/user/metric?year=<CURRENT-YEAR>&month=<CURRENT-MONTH-NUMBER>' 
+   ```
+
+   You should then get a JSON response as follow:
+
+   ```json
+   [{ "tenantid": "123456789-local-tenant-id", "activeUsers": 1 }]
+   ```
+
+1. If you like, add other users and/or other tenants and verify the results.
+
+
 ## Start the Database Service, the Easy Franchise Service, and the Business Partner Service
 
 ### Prerequisites
@@ -132,13 +199,6 @@ To run locally the services listed above, you have to configure some properties 
    > Note: If the request fails, check the logs of ```ef-service``` and ```db-service```.
 
 
-## Run the Day2 Service
-
-1. Open ```http://localhost:8091``` in a browser to check if the Day2 service is already started. You should get: 
-   
-   ![](../images/operationsServiceStartPage.png)
-1. If the server is not started please start it now.
-
 ## Run the Easy Franchise UI
 
 1. Check that you have defined the URL path of the backend APIs to the local backend services. Open the file [code/easyfranchise/source/ui/src/main.js](../../../code/easyfranchise/source/ui/src/main.js) and check the value for ```Vue.prototype.$backendApi``` for:
@@ -169,6 +229,8 @@ To run locally the services listed above, you have to configure some properties 
    http://localhost:8081/
    ```
 1. Open this URL in a browser.
+1. Opening the Easy Franchise UI will create a login metering info, which you should be able to see in the Metering Dashboard UI in the next step. 
+
    
 ## Run the Metering Dashboard UI
 
