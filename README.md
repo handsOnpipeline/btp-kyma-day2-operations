@@ -1,5 +1,7 @@
 # Easy Franchise: Extend a Kyma-Based Multitenant Application with Day 2 Operations
 
+[![REUSE status](https://api.reuse.software/badge/github.com/SAP-samples/btp-kyma-day2-operations)](https://api.reuse.software/info/github.com/SAP-samples/btp-kyma-day2-operations)
+
 > Important information: The content of this GitHub repository has been created as a source for the [Extend a Kyma-Based Multitenant Application with Day 2 Operations](https://discovery-center.cloud.sap/missiondetail/url-to-be-updated) mission at SAP Discovery Center. So, we recommend you use directly the mission in the SAP Discovery Center for a better experience.
 
 ## Description
