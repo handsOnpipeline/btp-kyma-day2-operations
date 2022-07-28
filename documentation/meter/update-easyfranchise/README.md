@@ -9,9 +9,9 @@ As mentioned in the previous chapter, the Easy Franchise application needs to be
 
 1. If you haven't already done this, clone the GitHub repository and navigate to the folder [backend](../../../code/easyfranchise/source/backend/) where you will find the respective code for the Easy Franchise application.
 
-1. Open the file [backend/ef-service/src/main/java/dev/kyma/samples/easyfranchise/EFService.java](../../../code/easyfranchise/source/backend/ef-service/src/main/java/dev/kyma/samples/easyfranchise/EFService.java) in your preferred editor.
+2. Open the file [backend/ef-service/src/main/java/dev/kyma/samples/easyfranchise/EFService.java](../../../code/easyfranchise/source/backend/ef-service/src/main/java/dev/kyma/samples/easyfranchise/EFService.java) in your preferred editor.
 
-1. Add some new methods within class **EFService** by pasting the following code to send the request to the API of the the Day2 app:
+3. Add some new methods within class **EFService** by pasting the following code to send the request to the API of the the Day2 app:
 
    ```java
    @PUT
@@ -88,8 +88,10 @@ As mentioned in the previous chapter, the Easy Franchise application needs to be
        return createOkResponseSimpleText("ok");
    }
    ```
-1. To make the application running locally, we use the file [hiddenconfig-template.properties](../../../code/easyfranchise/source/backend/shared-code/src/main/resources/hiddenconfig-template.properties) to store different properties. Copy this file and rename it to **hiddenconfig.properties**. 
-1. Add the URL of the Day2 service as a property in the file **hiddenconfig.properties** so that the Easy Franchise service knows where to call the API. Here is the code that should be added:
+
+4. To make the application running locally, we use the file [hiddenconfig-template.properties](../../../code/easyfranchise/source/backend/shared-code/src/main/resources/hiddenconfig-template.properties) to store different properties. Copy this file and rename it to **hiddenconfig.properties**. 
+
+5. Add the URL of the Day2 service as a property in the file **hiddenconfig.properties** so that the Easy Franchise service knows where to call the API. Here is the code that should be added:
 
    ```properties
    metering.operations.service: http://localhost:8091/
@@ -134,7 +136,7 @@ The UI is responsible to trigger and inform the Easy Franchsie service about a n
 
 1. Open the file [easyfranchise/source/ui/src/App.vue](../../../code/easyfranchise/source/ui/src/App.vue) in your preferred editor. 
 
-1. Add a new function called **LogUser** to call the API of the Easy Franchise service. This can be added under ```methods: { }``` . Here is the code:  
+2. Add a new function called **LogUser** to call the API of the Easy Franchise service. This can be added under ```methods: { }``` . Here is the code:  
    ```
     // Calling Metering API to register the user
     logUser(){
@@ -153,7 +155,8 @@ The UI is responsible to trigger and inform the Easy Franchsie service about a n
         });
     },
    ```
-1. Now we need to adapt the UI so that this method can been called every time the application is started. We are doing it by calling the method every time the UI is mounted. Search for the following section:
+
+3. Now we need to adapt the UI so that this method can been called every time the application is started. We are doing it by calling the method every time the UI is mounted. Search for the following section:
    ```
    mounted: function() {
      this.loadAllFranchises();
@@ -161,7 +164,8 @@ The UI is responsible to trigger and inform the Easy Franchsie service about a n
      this.checkandFillCompanyDetails();
    }
    ```  
-1. Add the previously created method ``this.logUser();`` to the mount function as follow:
+
+4. Add the previously created method ``this.logUser();`` to the mount function as follow:
    ```
    mounted: function() {
      this.loadAllFranchises();
@@ -175,4 +179,3 @@ The UI is responsible to trigger and inform the Easy Franchsie service about a n
 
 * You have implemented a new REST endpoint called **meter-user-login** in the Easy Franchise service. 
 * You have updated the UI so that it calls the Easy Franchise API **meter-user-login** once the application is started.
-
