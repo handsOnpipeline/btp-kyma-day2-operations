@@ -1,6 +1,7 @@
 # Understand the Implementation of the Day2 Application
 
 Lets first recap the architecture of the EasyFranchise application without metering:
+
 ![](https://raw.githubusercontent.com/SAP-samples/btp-kyma-multitenant-extension/main/documentation/images/easyfranchise-diagrams/Slide4.jpeg)
 
 To be able to meter **active users** we need new components. Have a look at the enhanced diagram:
