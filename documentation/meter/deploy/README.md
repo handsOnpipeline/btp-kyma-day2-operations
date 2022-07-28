@@ -24,7 +24,7 @@ To execute all the necessary steps for the deployment, you will need the followi
    cd code/setup
    ```
 
-1. Execute the [Easy Franchise Deployment Script](../../../code/setup/easyfranchise-deployment.sh):
+2. Execute the [Easy Franchise Deployment Script](../../../code/setup/easyfranchise-deployment.sh):
 
    ``` bash
    ./easyfranchise-deployment.sh
@@ -52,15 +52,15 @@ When we speak about **docker-repository**, we mean the combination of account an
    docker login
    ```
 
-1. Download the ```kubeconfig.yaml``` from the SAP BTP cockpit and make it available to the kubectl.
+2. Download the ```kubeconfig.yaml``` from the SAP BTP cockpit and make it available to the kubectl.
    1. Download the ```kubeconfig.yaml``` to your local folder.
-   1. Make the configuration available to kubcectl:
+   2. Make the configuration available to kubcectl:
 
       ```bash
       export KUBECONFIG=<path-to-kubeconfig>/kubeconfig.yaml
       ```
 
-   1. Check if you have the right config set:
+   3. Check if you have the right config set:
 
       ``` bash
       kubectl config current-context
@@ -68,20 +68,20 @@ When we speak about **docker-repository**, we mean the combination of account an
 
       You should see something similar to that: shoot--kyma--c-6e7a0c3
 
-1. Create a Day2 namespace:
+3. Create a Day2 namespace:
 
    ```bash
    kubectl create namespace day2-operations
    ```
 
-1. Create registry secret (for example, for Docker Hub):
+4. Create registry secret (for example, for Docker Hub):
 
    ```bash
    kubectl -n day2-operations create secret docker-registry registry-secret --docker-server=https://index.docker.io/v1/  --docker-username=<docker-id> 
    --docker-password=<password> --docker-email=<email>
    ```
 
-1. Build and deploy the Day2 service 
+5. Build and deploy the Day2 service 
    1. Navigate to the Day2 service source folder. As the Day2 service is based on Spring, we also use Spring tools to build the image.
 
       ``` bash
@@ -89,19 +89,19 @@ When we speak about **docker-repository**, we mean the combination of account an
       ./mvnw spring-boot:build-image -DskipTests=true -Dspring-boot.build-image.imageName="<docker-repository>:day2-service-0.1"
       ```
 
-   1. Push the image to the image registry:
+   2. Push the image to the image registry:
 
       ``` bash
       docker push <docker-repository>:day2-service-0.1
       ```
 
-   1. Deploy the Helm chart to your cluster (make sure to navigate back to the root of the repository):
+   3. Deploy the Helm chart to your cluster (make sure to navigate back to the root of the repository):
 
       ```bash
       helm upgrade "day2-service" "./code/day2-operations/deployment/helmCharts/day2-service-chart" --install --namespace day2-operations --set db.sqlendpoint="<HANA Cloud SQL Endpoint>" --set db.admin="<DB Admin User>" --set db.password="<DB Admin Password>" --set image.repository="<docker-repository>" --set image.tag="day2-service-0.1" --wait --timeout 300s --atomic
       ```
 
-   1. If the deployment was successful, you should see the following output:
+   4. If the deployment was successful, you should see the following output:
 
       ``` bash
       Release "day2-service" has been upgraded. Happy Helming!
@@ -113,26 +113,26 @@ When we speak about **docker-repository**, we mean the combination of account an
       TEST SUITE: None
       ```
 
-1. Build and deploy the Day2 Approuter:
+6. Build and deploy the Day2 Approuter:
    1. Build the Docker image:
 
       ```bash
       docker build --no-cache=true --rm -t "<docker-repository>:day2-approuter-0.1"  -f "code/day2-operations/deployment/docker/Dockerfile-day2-approuter" .
       ```
 
-   1. Push the image:
+   2. Push the image:
 
       ``` bash
       docker push <docker-repository>:day2-approuter-0.1
       ```
 
-   1. Deploy the Approuter:
+   3. Deploy the Approuter:
 
       ```bash
       helm upgrade "day2-approuter" "./code/day2-operations/deployment/helmCharts/day2-approuter-chart" --install --namespace day2-operations --set clusterdomain="<kyma-cluster-domain>" --set image.repository="<docker-repository>" --set image.tag="day2-approuter-0.1" --wait --timeout 300s --atomic    
       ```
 
-   1. If the deployment was successful, you should see the following output:
+   4. If the deployment was successful, you should see the following output:
 
       ``` bash
       Release "day2-approuter" has been upgraded. Happy Helming!
@@ -144,26 +144,26 @@ When we speak about **docker-repository**, we mean the combination of account an
       TEST SUITE: None
       ```
 
-1. Build and deploy the Day2 UI.
+7. Build and deploy the Day2 UI.
    1. Build the Docker image:
 
       ```bash
       docker build --no-cache=true --rm -t "<docker-repository>:day2-ui-0.1"  -f "code/day2-operations/deployment/docker/Dockerfile-day2-ui" .
       ```
 
-   1. Push the image:
+   2. Push the image:
 
       ``` bash
       docker push <docker-repository>:day2-ui-0.1
       ```
 
-   1. Deploy the UI:
+   3. Deploy the UI:
 
       ```bash
       helm upgrade "day2-ui" "./code/day2-operations/deployment/helmCharts/day2-ui-chart" --install --namespace day2-operations --set image.repository="<docker-repository>" --set image.tag="day2-ui-0.1" --wait --timeout 300s --atomic
       ```
 
-   1. If the deployment was successful, you should see the following output:
+   4. If the deployment was successful, you should see the following output:
 
       ``` bash
       Release "day2-ui" has been upgraded. Happy Helming!
