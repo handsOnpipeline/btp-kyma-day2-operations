@@ -56,8 +56,7 @@ As mentioned in the previous chapter, the Easy Franchise application needs to be
          
          // The user in plainext is taken. Consider encrypting if a higher privacy policy is needed.
          var user = getUserFromBearerToken(authorisationHeaders.get(0));
-         return user; 
-
+         return user;
     }
    /**
     * Get the User from the bearerToken
@@ -89,9 +88,7 @@ As mentioned in the previous chapter, the Easy Franchise application needs to be
        return createOkResponseSimpleText("ok");
    }
    ```
-
 1. To make the application running locally, we use the file [hiddenconfig-template.properties](../../../code/easyfranchise/source/backend/shared-code/src/main/resources/hiddenconfig-template.properties) to store different properties. Copy this file and rename it to **hiddenconfig.properties**. 
-
 1. Add the URL of the Day2 service as a property in the file **hiddenconfig.properties** so that the Easy Franchise service knows where to call the API. Here is the code that should be added:
 
    ```properties
@@ -156,7 +153,6 @@ The UI is responsible to trigger and inform the Easy Franchsie service about a n
         });
     },
    ```
-
 1. Now we need to adapt the UI so that this method can been called every time the application is started. We are doing it by calling the method every time the UI is mounted. Search for the following section:
    ```
    mounted: function() {
@@ -165,7 +161,6 @@ The UI is responsible to trigger and inform the Easy Franchsie service about a n
      this.checkandFillCompanyDetails();
    }
    ```  
-   
 1. Add the previously created method ``this.logUser();`` to the mount function as follow:
    ```
    mounted: function() {
