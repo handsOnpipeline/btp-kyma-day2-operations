@@ -12,20 +12,20 @@ To obtain a tenant of Identity Authentication please refer to [official document
 
    ![](images/ias_switch_to_openid.png)
 
-1. Click on **OpenID Connect Configuration**,  then choose a proper name and set the callback URL to the path `https://grafana.<your-Kyma-cluster-domain>/oauth2/callback`. Then click **Save** button. 
+2. Click on **OpenID Connect Configuration**,  then choose a proper name and set the callback URL to the path `https://grafana.<your-Kyma-cluster-domain>/oauth2/callback`. Then click **Save** button. 
 
    ![](images/ias_callback_url.png)
 
    Note that the domain of Kyma cluster follows the convention  `https://grafana.<cluster-domain>`,  e.g. https://grafana.c-83380a9.stage.kyma.ondemand.com/
 
-1. Click on **Client Authentication**. Then click **Add** button to create a secret in IAS for API Authentication. 
+3. Click on **Client Authentication**. Then click **Add** button to create a secret in IAS for API Authentication. 
 
    ![](images/navigate_create_secret.png) 
 
-1. In the opened dialog provide meaningful description check what is preselected in for **Expire in**. All **scopes** should be selected. Click on **Save** button. Note down the **Client ID** and **Client Secret** in the popup window.
+4. In the opened dialog provide meaningful description check what is preselected in for **Expire in**. All **scopes** should be selected. Click on **Save** button. Note down the **Client ID** and **Client Secret** in the popup window.
    
    ![](images/create_secret.png)
-1. Create a Secret for OAuth2 Proxy in Kyma cluster
+5. Create a Secret for OAuth2 Proxy in Kyma cluster
 
    The **client_id_from_IAS** and **client_secret_from_IAS** are created in previous step. The **IAS URL** is the URL of your Identity Authentication tenant URL.
    Before running the below command, replace below placeholders with your own values.
@@ -40,7 +40,7 @@ To obtain a tenant of Identity Authentication please refer to [official document
    							--from-literal="OAUTH2_PROXY_SKIP_PROVIDER_BUTTON=true"
    ```
 
-1. Restart the OAuth2 Proxy pod by run the following command
+6. Restart the OAuth2 Proxy pod by run the following command
 
    ```shell
    kubectl -n kyma-system rollout restart deployment monitoring-auth-proxy-grafana
@@ -52,7 +52,7 @@ To obtain a tenant of Identity Authentication please refer to [official document
    ![](images/GrafanaLink_dashboard.png)
 
 
-1. You can then go to **Explorer** on the sidebar to check which metrics are available.
+2. You can then go to **Explorer** on the sidebar to check which metrics are available.
 
    ![](images/grafana_metrics.png)
 
