@@ -1,6 +1,6 @@
 # Create a Webhook for the GitHub Repository
 
-Now that we have created the jobs for both UI's, Easy Franchies UI and Day 2 Operations UI, we can trigger the build manually. What we actually want is that the build is triggered automatically each time when there is a change in the repository. Therefore, we will configure a webhook that reacts on changes.
+Now that we have created the jobs for both UI's, Easy Franchie UI and Day 2 Operations UI, we can trigger the build manually. What we actually want is that the build is triggered automatically each time when there is a change in the repository. Therefore, we will configure a webhook that reacts on changes.
 
 ## Enable the Webhook in Our Repository
 
@@ -66,4 +66,4 @@ In order to test the webhook, you can perform a change in the Easy Franchise app
 
 As soon as the changes are pushed, both jobs are triggered automatically. After the job is finished, open the application UI and check if your changes are there.
 
-Note: As we have only changed one of the UIs, it would be unnecessary to trigger both jobs. But as we use one and the same repository for each build job, we cannot prevent that.
+Note: As we have only changed one of the UIs, it would be unnecessary to trigger both jobs. But as we use one and the same repository and branch for each build job, we cannot prevent that.

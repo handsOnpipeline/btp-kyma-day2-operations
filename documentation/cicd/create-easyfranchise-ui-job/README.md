@@ -2,14 +2,14 @@
 
 In this chapter we will create a job that builds and deploys the Easy Franchise UI in your Kyma cluster.
 
-## Launch the SAP Continues Integration & Delivery Service
+## Launch the SAP Continuous Integration & Delivery Service
 
    1. In the **EasyFranchise** subaccount, navigate to **Instances and Subscriptions**.
    2. Choose **Go to Application** in the menu of the **Continuous Integration & Delivery** application.
 
       ![](./images/04-LaunchApplication.png)
 
-## Configure the Required Credentials in the SAP Continues Integration & Delivery Service
+## Configure the Required Credentials in the SAP Continuous Integration & Delivery Service
 
 ### Credentials for the GitHub Repository
 We need credentials for accessing the GitHub repository: 
@@ -27,18 +27,18 @@ We need credentials for accessing the GitHub repository:
       
    ![](./images/05-CICD-03.png)  
 
-### Credentials for the Docker Hub
+### Credentials for Docker Hub
 
-We also need credentials for the Docker hub:
+We also need credentials for Docker hub:
 1. Choose **+** to create a another credential and enter a name and description for the credential, for example **dockerhub**.
 2. Enter the credential information like this:
 
    ``` json
    {
       "auths": {
-         "https://<Container Registry URL>": {
-            "username": "<USERNAME>",
-            "password": "<PASSWORD OR ACCESS TOKEN>"
+         "https://index.docker.io/v1/": {
+            "username": "replaceWithUsername",
+            "password": "replaceWithPasswordOrAccessToken"
          }
       }
    }
@@ -53,7 +53,7 @@ We also need credentials for the Docker hub:
 Configure the **Service account** credentials for the **frontend** namespace: 
 
 1. Choose **+** to create a another credential and enter a name and description.
-2. Paste the content of the **kubeconfig.yaml** file which you have downloaded for the service account of the **frontend** namespace (see above).
+2. Paste the content of the **kubeconfig.yaml** file which you have downloaded for the service account of the **frontend** namespace (see card titled “Create a GitHub Repository and a Kyma Service Account”).
 3. Choose **Create**.
 
    ![](./images/05-CICD-15c.png)
@@ -77,14 +77,14 @@ Configure the **Service account** credentials for the **frontend** namespace:
 
      ![](./images/05-CICD-02.png)
 
-## Configure "Staging" in the Continuous Integration and Delivery Job
+## Configure Stages in the Continuous Integration and Delivery Job
 
-In the **Staging** part of the Continuous Integration and Delivery Job, we have to configure various things.
+In the Stages section of the Continuous Integration and Delivery Job, we have to configure various things.
 
 Configure the **General Parameters**:
 
 1. Enter the URL to the container registry, for example <https://docker.io> for Docker Hub.
-2. Enter the image name. For Docker Hub it follows this format: **"username"/"repository name"/"image-name"**. As a free Docker Hub user, you only have one private repository that you can use, therefore we are using username and repository name as image name and make the component name part of the tag. That way, we can push multiple images to the same repository.
+2. Enter the image name. For Docker Hub it follows this format: **username/repositoryName/image-name**. As a free Docker Hub user, you only have one private repository that you can use, therefore we are using username and repository name as image name and make the component name part of the tag. That way, we can push multiple images to the same repository.
 3. Usually the tag should be your version number of the image and ideally you choose the **Tag Container Image Automatically** to make sure you receive a new version every build. But as written above, we will use the repository for more than one image and therefore select a dedicated image tag so we can better see what is happening in our registry.
 4. **Container Registry Credentials**: select your already created Docker Hub credential.
 
@@ -99,8 +99,8 @@ Configure the **Build**:
 
 Configure **Acceptance** and **Release**:
 
-1. Disable the **Acceptance** step.
-2. Enable the **Release** step.
+1. Disable the **Acceptance** stage.
+2. Enable the **Release** stage.
 3. Fill in the rest of the information:
    * Namespace: frontend
    * Deploy Tool: kubectl
