@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="mt-5 mb-5 text-center">User Profile</h1>
+    <h1 class="mt-5 mb-5 text-center">User Details</h1>
     <!-- Manage coordinator details section -->
     <div class="container">
       <div class="fd-row">
